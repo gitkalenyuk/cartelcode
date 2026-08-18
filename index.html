@@ -1,0 +1,1264 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Cartel Code — портативний агент для коду</title>
+<meta name="description" content="Cartel Code — портативний десктопний агент для коду з українським інтерфейсом, власним шлюзом API з пулом ключів і каталогом на 168 плагінів. Завантажте для Windows або macOS." />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0b0e14" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Cartel Code — портативний агент для коду" />
+<meta property="og:description" content="Український інтерфейс, шлюз API з пулом ключів, 168 плагінів. Розпакував — працює." />
+<meta property="og:locale" content="uk_UA" />
+<meta property="og:url" content="https://gitkalenyuk.github.io/cartelcode/" />
+<meta property="og:site_name" content="Cartel Code" />
+<meta name="twitter:card" content="summary" />
+
+<link rel="canonical" href="https://gitkalenyuk.github.io/cartelcode/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='56' fill='%23111520'/%3E%3Cg fill='none' stroke='%23f3b53f' stroke-width='20' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='92,96 126,128 92,160'/%3E%3Cline x1='140' y1='164' x2='176' y2='164'/%3E%3C/g%3E%3C/svg%3E" />
+
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Cartel Code — public download page
+   Single file. No external requests of any kind.
+   ───────────────────────────────────────────────────────────── */
+
+:root{
+  --bg:#0b0e14;
+  --bg-lift:#0e121a;
+  --panel:#151a23;
+  --panel-2:#1b212c;
+  --line:#262e3b;
+  --line-soft:#1c2330;
+
+  --txt:#e9edf5;
+  --txt-2:#c3cad6;
+  --muted:#9aa4b4;
+
+  --gold:#f3b53f;
+  --gold-hi:#ffd76a;
+  --gold-deep:#d98322;
+  --gold-ink:#1a1200;
+  --gold-wash:rgba(243,181,63,.07);
+  --gold-edge:rgba(243,181,63,.32);
+
+  --ok:#4cd07d;
+  --bad:#e2574c;
+
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+
+  --gutter:150px;
+  --gap:40px;
+  --radius:14px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+/* The `hidden` attribute is only `display:none` in the UA sheet, so ANY author
+   display rule beats it. .mf-note sets display:flex, which would leave the
+   status strip permanently rendered as an empty band. Restore the intent. */
+[hidden]{display:none !important}
+
+html{-webkit-text-size-adjust:100%}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--txt);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,h4{margin:0;font-weight:700;line-height:1.15;letter-spacing:-.022em;text-wrap:balance}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+a{color:inherit}
+
+::selection{background:var(--gold);color:var(--gold-ink)}
+
+:focus-visible{
+  outline:2px solid var(--gold-hi);
+  outline-offset:3px;
+  border-radius:4px;
+}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+/* ── mono utility: real data only (versions, filenames, sizes, commands) ── */
+.mono{font-family:var(--mono);font-size:.86em;letter-spacing:.01em;font-variant-ligatures:none}
+
+/* ═══════════ TOP BAR ═══════════ */
+.top{
+  border-bottom:1px solid var(--line-soft);
+  background:rgba(11,14,20,.86);
+  backdrop-filter:saturate(140%) blur(10px);
+  position:sticky;top:0;z-index:40;
+}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.lockup{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none}
+.mark{width:26px;height:auto;display:block;flex:none}
+.lockup .nm{font-weight:700;font-size:15.5px;letter-spacing:-.01em}
+.top-links{display:flex;align-items:center;gap:22px}
+.top-links a{
+  color:var(--muted);text-decoration:none;font-size:14px;
+  transition:color .16s ease;
+}
+.top-links a:hover{color:var(--txt)}
+.top-links .gh{display:flex;align-items:center;gap:7px}
+.top-links .gh svg{width:16px;height:16px;flex:none}
+
+/* ═══════════ HERO ═══════════ */
+.hero{position:relative;padding:64px 0 8px;overflow:hidden}
+
+/* faint cartel diamond, traced from the app icon — atmosphere, not decoration */
+.diamond{
+  position:absolute;pointer-events:none;
+  width:620px;height:620px;
+  right:-168px;top:-152px;
+  opacity:.5;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(760px 340px at 12% -12%,rgba(243,181,63,.09),transparent 62%);
+}
+.hero-in{position:relative;z-index:1}
+
+.big-mark{width:52px;height:auto;display:block;margin-bottom:22px}
+
+h1{
+  font-size:clamp(2.15rem,5.4vw,3.5rem);
+  letter-spacing:-.032em;
+  max-width:19ch;
+  margin-bottom:20px;
+}
+h1 .amp{color:var(--gold)}
+
+.pitch{
+  color:var(--txt-2);
+  font-size:clamp(1.02rem,1.7vw,1.19rem);
+  line-height:1.55;
+  max-width:56ch;
+}
+
+/* ═══════════ RELEASE MANIFEST — the thesis ═══════════ */
+.manifest{
+  margin:44px 0 0;
+  background:linear-gradient(180deg,var(--panel) 0%,var(--bg-lift) 100%);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 26px 60px -22px rgba(0,0,0,.85),0 2px 0 rgba(255,255,255,.02) inset;
+  overflow:hidden;
+}
+
+.mf-head{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:14px 22px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.014);
+}
+.mf-title{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);
+}
+.mf-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ver{
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  color:var(--gold-hi);
+  background:var(--gold-wash);
+  border:1px solid var(--gold-edge);
+  border-radius:999px;
+  padding:2.5px 11px;
+  white-space:nowrap;
+}
+.rel-date{font-size:13px;color:var(--muted);white-space:nowrap}
+
+/* rows */
+.row{
+  display:grid;
+  grid-template-columns:130px minmax(0,1fr) auto;
+  align-items:center;
+  gap:20px;
+  padding:20px 22px;
+  border-top:1px solid var(--line-soft);
+  transition:background .2s ease;
+}
+.row:first-of-type{border-top:0}
+.row.is-you{background:var(--gold-wash)}
+
+.plat{display:flex;align-items:center;gap:10px;min-width:0}
+.plat svg{width:19px;height:19px;flex:none;color:var(--txt-2)}
+.row.is-you .plat svg{color:var(--gold)}
+.plat b{font-size:15.5px;font-weight:650;letter-spacing:-.01em}
+
+.file{min-width:0}
+.file .fn{
+  font-family:var(--mono);font-size:12.6px;color:var(--txt-2);
+  display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.file .fm{font-size:12.6px;color:var(--muted);margin-top:3px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.you-chip{
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;font-weight:650;
+  color:var(--gold-hi);background:var(--gold-wash);border:1px solid var(--gold-edge);
+  border-radius:999px;padding:1px 8px;white-space:nowrap;
+}
+
+.acts{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:inherit;font-size:14.5px;font-weight:650;letter-spacing:-.005em;
+  padding:11px 18px;border-radius:10px;
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  border:1px solid var(--line);
+  background:var(--panel-2);
+  color:var(--txt);
+  transition:background .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease,color .16s ease;
+}
+.btn svg{width:15px;height:15px;flex:none}
+.btn:hover{background:#222a37;border-color:#33405270;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+
+.btn-gold{
+  background:linear-gradient(180deg,var(--gold-hi) 0%,var(--gold) 52%,var(--gold-deep) 100%);
+  color:var(--gold-ink);
+  border-color:transparent;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,.72);
+}
+.btn-gold:hover{
+  background:linear-gradient(180deg,#ffe08a 0%,#f7bf52 52%,#e08d26 100%);
+  border-color:transparent;
+  box-shadow:0 12px 24px -9px rgba(0,0,0,.8);
+}
+.btn[aria-disabled="true"],.btn:disabled{
+  opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;
+  background:var(--panel-2);color:var(--muted);border-color:var(--line);
+}
+.btn[aria-disabled="true"]:hover{background:var(--panel-2);border-color:var(--line);transform:none}
+
+.btn-sm{padding:9px 14px;font-size:13.5px}
+
+/* manifest footer note */
+.mf-foot{
+  padding:13px 22px;
+  border-top:1px solid var(--line-soft);
+  background:rgba(0,0,0,.18);
+  font-size:12.8px;color:var(--muted);
+  display:flex;gap:9px;align-items:flex-start;
+}
+.mf-foot svg{width:14px;height:14px;flex:none;margin-top:3px;color:var(--gold)}
+.mf-foot a{color:var(--txt-2);text-underline-offset:3px}
+.mf-foot a:hover{color:var(--gold-hi)}
+
+/* status strip (error / empty) */
+.mf-note{
+  padding:18px 22px;font-size:14px;color:var(--muted);
+  display:flex;gap:11px;align-items:flex-start;
+}
+.mf-note svg{width:16px;height:16px;flex:none;margin-top:3px}
+.mf-note.warn svg{color:var(--gold)}
+.mf-note.err svg{color:var(--bad)}
+.mf-note b{color:var(--txt-2);font-weight:650}
+.mf-note a{color:var(--gold-hi);text-underline-offset:3px}
+
+/* skeletons */
+.sk{
+  display:inline-block;border-radius:5px;
+  background:linear-gradient(90deg,#1e2531 0%,#2a3342 40%,#1e2531 80%);
+  background-size:220% 100%;
+  animation:sweep 1.5s ease-in-out infinite;
+  color:transparent;user-select:none;
+}
+@keyframes sweep{0%{background-position:120% 0}100%{background-position:-70% 0}}
+
+/* row resolve — the one authored motion moment */
+.row.resolved{animation:settle .5s cubic-bezier(.16,.84,.34,1) both}
+.row.resolved:nth-of-type(2){animation-delay:.07s}
+@keyframes settle{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+}
+
+/* ═══════════ SECTIONS ═══════════ */
+.sec{
+  display:grid;
+  grid-template-columns:var(--gutter) minmax(0,1fr);
+  gap:0 var(--gap);
+  padding:74px 0 0;
+}
+.sec-label{
+  grid-column:1;
+  font-family:var(--mono);
+  font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+  padding-top:5px;
+  position:relative;
+  padding-left:17px;
+}
+/* the prompt gutter — the mark, carried as page structure */
+.sec-label::before{
+  content:"\203A";
+  position:absolute;left:0;top:2px;
+  color:var(--gold);font-size:15px;line-height:1.35;font-weight:700;
+}
+.sec-body{grid-column:2;min-width:0}
+
+.sec h2{
+  font-size:clamp(1.45rem,2.6vw,1.9rem);
+  letter-spacing:-.028em;
+  margin-bottom:8px;
+}
+.sec .lede{color:var(--muted);font-size:15.5px;max-width:62ch;margin-bottom:30px}
+
+/* ── spec rows (features) — hairline-ruled, not cards ── */
+.spec{border-top:1px solid var(--line-soft)}
+.spec > li{
+  display:grid;
+  grid-template-columns:minmax(0,15.5rem) minmax(0,1fr);
+  gap:6px 36px;
+  padding:22px 0;
+  border-bottom:1px solid var(--line-soft);
+}
+.spec h3{font-size:16px;font-weight:650;letter-spacing:-.012em}
+.spec p{color:var(--muted);font-size:15px;max-width:60ch}
+.spec p em{color:var(--txt-2);font-style:normal;font-weight:550}
+
+/* ── install steps ── */
+.steps{position:relative;padding-left:0}
+.steps > li{
+  position:relative;
+  padding:0 0 30px 46px;
+}
+.steps > li::before{
+  content:attr(data-n);
+  position:absolute;left:0;top:0;
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12.5px;font-weight:700;
+  color:var(--gold-hi);
+  background:var(--panel);
+  border:1px solid var(--gold-edge);
+}
+/* 1px connector rail */
+.steps > li::after{
+  content:"";position:absolute;left:13.5px;top:32px;bottom:2px;
+  width:1px;background:var(--line);
+}
+.steps > li:last-child{padding-bottom:0}
+.steps > li:last-child::after{display:none}
+.steps h3{font-size:16.5px;font-weight:650;margin-bottom:6px;letter-spacing:-.012em}
+.steps p{color:var(--muted);font-size:15px;max-width:62ch}
+.steps p + p{margin-top:8px}
+.steps code{
+  font-family:var(--mono);font-size:.86em;
+  background:var(--panel);border:1px solid var(--line);
+  padding:1.5px 6px;border-radius:5px;color:var(--txt-2);
+  white-space:nowrap;
+}
+
+/* ── changelog ── */
+.notes{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  max-width:70ch;
+}
+.notes .nt-h{
+  font-size:14px;font-weight:700;color:var(--txt);
+  margin:18px 0 8px;letter-spacing:-.01em;
+}
+.notes .nt-h:first-child{margin-top:0}
+.notes .nt-p{color:var(--muted);font-size:14.6px;margin:0 0 10px}
+.notes .nt-ul{margin:0 0 12px}
+.notes .nt-ul li{
+  color:var(--muted);font-size:14.6px;
+  padding-left:19px;position:relative;margin-bottom:6px;
+}
+.notes .nt-ul li::before{
+  content:"";position:absolute;left:2px;top:.62em;
+  width:5px;height:5px;border-radius:50%;background:var(--gold-deep);
+}
+.notes .nt-empty{color:var(--muted);font-size:14.6px}
+
+/* ── FAQ ── */
+.faq{border-top:1px solid var(--line-soft)}
+.faq details{border-bottom:1px solid var(--line-soft)}
+.faq summary{
+  cursor:pointer;list-style:none;
+  padding:19px 34px 19px 0;
+  position:relative;
+  font-size:15.8px;font-weight:600;letter-spacing:-.012em;
+  color:var(--txt);
+  transition:color .16s ease;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--gold-hi)}
+.faq summary::after{
+  content:"";position:absolute;right:6px;top:50%;
+  width:9px;height:9px;
+  border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
+  transform:translateY(-70%) rotate(45deg);
+  transition:transform .22s ease,border-color .16s ease;
+}
+.faq details[open] summary::after{transform:translateY(-25%) rotate(-135deg);border-color:var(--gold)}
+.faq .ans{color:var(--muted);font-size:15px;max-width:64ch;padding:0 0 22px}
+.faq .ans p + p{margin-top:10px}
+.faq .ans code{
+  font-family:var(--mono);font-size:.86em;
+  background:var(--panel);border:1px solid var(--line);
+  padding:1.5px 6px;border-radius:5px;color:var(--txt-2);
+}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{
+  margin-top:90px;
+  border-top:1px solid var(--line-soft);
+  padding:34px 0 56px;
+}
+.ft-in{display:flex;gap:26px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.ft-brand{display:flex;align-items:center;gap:11px}
+.ft-brand svg{width:22px;height:auto}
+.ft-brand .nm{font-weight:650;font-size:14.5px}
+.ft-brand .sub{font-size:12.8px;color:var(--muted);margin-top:1px}
+.ft-links{display:flex;gap:24px;flex-wrap:wrap}
+.ft-links a{color:var(--muted);font-size:14px;text-decoration:none;transition:color .16s ease}
+.ft-links a:hover{color:var(--gold-hi)}
+.ft-legal{width:100%;color:var(--muted);font-size:12.6px;margin-top:22px;max-width:70ch}
+
+noscript .ns{
+  display:block;margin:32px 0 0;padding:18px 22px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  color:var(--muted);font-size:14.5px;
+}
+noscript .ns a{color:var(--gold-hi)}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width:900px){
+  :root{--gutter:118px;--gap:28px}
+}
+@media (max-width:800px){
+  .sec{grid-template-columns:minmax(0,1fr);padding-top:58px}
+  .sec-label{grid-column:1;margin-bottom:14px;padding-top:0}
+  .sec-label::before{top:-1px}
+  .sec-body{grid-column:1}
+  .spec > li{grid-template-columns:minmax(0,1fr);gap:6px}
+  .spec p{max-width:none}
+  .hero{padding-top:56px}
+  .diamond{width:440px;height:440px;right:-150px;top:-132px;opacity:.34}
+}
+@media (max-width:680px){
+  .wrap{padding:0 20px}
+  .row{
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+    padding:20px;
+  }
+  .acts{justify-content:stretch}
+  .acts .btn{flex:1 1 auto}
+  .mf-head{padding:13px 20px}
+  .mf-foot,.mf-note{padding:15px 20px}
+  .top-links a.hide-sm{display:none}
+}
+@media (max-width:420px){
+  .wrap{padding:0 16px}
+  body{font-size:15.5px}
+  .big-mark{width:44px;margin-bottom:20px}
+  .row{padding:18px 16px}
+  .mf-head{padding:12px 16px;gap:10px}
+  .mf-foot,.mf-note{padding:14px 16px}
+  .notes{padding:18px 17px}
+  .acts{flex-direction:column;align-items:stretch}
+  .acts .btn{width:100%}
+  .steps > li{padding-left:38px}
+  .steps > li::after{left:12.5px}
+  .steps > li::before{width:26px;height:26px}
+  .diamond{width:360px;height:360px;right:-128px;top:-116px;opacity:.26}
+}
+
+/* ═══════════ MOTION ═══════════ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .sk{background:#232b38}
+  .btn:hover{transform:none}
+}
+</style>
+</head>
+
+<body>
+<!--
+DIRECTION CONTRACT — Cartel Code / public download page
+THESIS: The live release record is the hero. This page is the build manifest you download from,
+  not a marketing hero with a button bolted onto it. It refuses the category default: centered
+  gradient hero, three equal feature cards, download demoted to an afterthought.
+OWN-WORLD: Near-black #0b0e14 ground, #151a23 panels, #262e3b hairlines, one gold ramp
+  #ffd76a -> #f3b53f -> #d98322. Terminal motif carried as structure, not costume: a gold
+  chevron prompt marks every section label in the left rail, and monospace is reserved for real
+  data (versions, filenames, byte sizes, commands). Hairline-ruled spec rows instead of cards.
+  Left-aligned throughout; nothing is centered.
+STORY: A visitor arrives from Telegram, sees the real version and file size for their own OS
+  already lit in gold, downloads in one action, and learns access is members-only before install.
+FIRST VIEWPORT: Left-aligned prompt mark and headline at display scale, then the release manifest
+  panel - version chip and date in its header, one hairline-ruled row per platform carrying
+  filename, size and its download action. The detected OS row is gold-washed and carries the
+  solid gold button; the other row stays quiet but fully usable.
+FORM: Release-manifest / package-registry page, candidate 3 of the grounded list; seed c2377cb7.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="lockup" href="#top" aria-label="Cartel Code — на початок">
+      <svg class="mark" viewBox="83 87 102 86" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="g1" x1="83" y1="87" x2="185" y2="173" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffd76a"/><stop offset=".5" stop-color="#f3b53f"/><stop offset="1" stop-color="#d98322"/>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#g1)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="92,96 126,128 92,160"/>
+          <line x1="140" y1="164" x2="176" y2="164"/>
+        </g>
+      </svg>
+      <span class="nm">Cartel Code</span>
+    </a>
+    <nav class="top-links" aria-label="Розділи">
+      <a class="hide-sm" href="#features">Можливості</a>
+      <a class="hide-sm" href="#install">Встановлення</a>
+      <a class="gh" id="lnk-repo" href="https://github.com/gitkalenyuk/cartelcode" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ══ HERO + RELEASE MANIFEST ══ -->
+  <section class="hero">
+    <svg class="diamond" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="gd" x1="46" y1="46" x2="210" y2="210" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#ffd76a" stop-opacity=".26"/>
+          <stop offset=".55" stop-color="#f3b53f" stop-opacity=".13"/>
+          <stop offset="1" stop-color="#d98322" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="M128 46 L210 128 L128 210 L46 128 Z" fill="none" stroke="url(#gd)" stroke-width="3"/>
+      <path d="M128 12 L244 128 L128 244 L12 128 Z" fill="none" stroke="url(#gd)" stroke-width="1.5"/>
+    </svg>
+    <div class="wrap hero-in">
+      <svg class="big-mark" viewBox="83 87 102 86" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="url(#g1)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="92,96 126,128 92,160"/>
+          <line x1="140" y1="164" x2="176" y2="164"/>
+        </g>
+      </svg>
+
+      <h1>Портативний агент для коду з українським інтерфейсом</h1>
+
+      <p class="pitch">
+        Cartel Code — це десктопний застосунок, який пише, читає й править код разом з вами.
+        Власний шлюз API з пулом ключів, 168 плагінів, повністю українська оболонка.
+        Node і Electron уже всередині: розпакували — працює.
+      </p>
+
+      <!-- the manifest: live release record -->
+      <section class="manifest" id="download" aria-labelledby="mf-title">
+        <div class="mf-head">
+          <span class="mf-title" id="mf-title">Маніфест релізу</span>
+          <span class="mf-meta">
+            <span class="ver" id="ver"><span class="sk">v0.0.0</span></span>
+            <span class="rel-date" id="rel-date"><span class="sk">00 000000 0000</span></span>
+          </span>
+        </div>
+
+        <div id="rows">
+          <!-- Windows -->
+          <div class="row" id="row-win">
+            <span class="plat">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M3 5.6 10.2 4.6v6.9H3V5.6Zm0 12.8 7.2 1v-6.8H3v5.8Zm8.1 1.1L21 21V12.6h-9.9v6.9Zm0-15L21 3v8.4h-9.9V4.5Z"/></svg>
+              <b>Windows</b>
+            </span>
+            <span class="file">
+              <span class="fn" id="win-fn"><span class="sk">CartelCode-0.0.0-setup.exe</span></span>
+              <span class="fm">
+                <span id="win-sz"><span class="sk">000 МБ</span></span>
+                <span class="you-chip" id="win-you" hidden>ваша система</span>
+              </span>
+            </span>
+            <span class="acts" id="win-acts">
+              <a class="btn" id="win-btn" href="https://github.com/gitkalenyuk/cartelcode/releases" aria-disabled="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 1.6v8.5M4.6 7l3.4 3.4L11.4 7M2 13.2h12"/></svg>
+                <span>Завантажити</span>
+              </a>
+            </span>
+          </div>
+
+          <!-- macOS -->
+          <div class="row" id="row-mac">
+            <span class="plat">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.1 12.5c0-2.2 1.8-3.3 1.9-3.3-1-1.5-2.6-1.7-3.2-1.8-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.9.9-3.6 2.2-1.6 2.7-.4 6.7 1.1 8.9.7 1.1 1.6 2.3 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.7.7 2.9.7c1.2 0 1.9-1.1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.4s-2.1-.8-2.1-3.7ZM14 5.9c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1.1 1.7-.9 2.6 1 .1 2-.5 2.6-1.2Z"/></svg>
+              <b>macOS</b>
+            </span>
+            <span class="file">
+              <span class="fn" id="mac-fn"><span class="sk">CartelCode-0.0.0-arm64.dmg</span></span>
+              <span class="fm">
+                <span id="mac-sz"><span class="sk">000 МБ</span></span>
+                <span class="you-chip" id="mac-you" hidden>ваша система</span>
+              </span>
+            </span>
+            <span class="acts" id="mac-acts">
+              <a class="btn" id="mac-btn" href="https://github.com/gitkalenyuk/cartelcode/releases" aria-disabled="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 1.6v8.5M4.6 7l3.4 3.4L11.4 7M2 13.2h12"/></svg>
+                <span>Завантажити</span>
+              </a>
+            </span>
+          </div>
+        </div>
+
+        <!-- status strip: filled only for empty / error states -->
+        <div class="mf-note warn" id="mf-status" hidden></div>
+
+        <div class="mf-foot">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 1.8 2.6 4v3.7c0 3.2 2.2 5.6 5.4 6.5 3.2-.9 5.4-3.3 5.4-6.5V4L8 1.8Z"/><path d="M5.9 8 7.4 9.5l2.7-2.9"/></svg>
+          <span>
+            Доступ до застосунку — для учасників обох спільнот YT&nbsp;Cartel; вхід підтверджується
+            через Telegram при першому запуску. Усі файли й контрольні суми
+            <a href="https://github.com/gitkalenyuk/cartelcode/releases" id="lnk-rel-1" rel="noopener">опубліковані в релізах</a>.
+          </span>
+        </div>
+      </section>
+
+      <noscript>
+        <span class="ns">
+          Для автоматичного визначення системи й актуальних посилань потрібен JavaScript.
+          Усі збірки доступні напряму:
+          <a href="https://github.com/gitkalenyuk/cartelcode/releases">github.com/gitkalenyuk/cartelcode/releases</a>
+        </span>
+      </noscript>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ══ -->
+  <section class="sec" id="features">
+    <p class="sec-label">Що всередині</p>
+    <div class="sec-body">
+      <h2>П'ять речей, заради яких це збирали</h2>
+      <p class="lede">Не перелік модних слів, а те, що справді відрізняє цю збірку від голого фреймворку.</p>
+
+      <ul class="spec">
+        <li>
+          <h3>Шлюз API з пулом ключів</h3>
+          <p>
+            Кілька ключів на одного провайдера, ротація по колу між живими. Вичерпав квоту —
+            ключ <em>автоматично заморожується</em> на заданий час, а запит тут же перемикається
+            на наступний живий. Нічого не треба міняти вручну посеред роботи.
+          </p>
+        </li>
+        <li>
+          <h3>168 плагінів</h3>
+          <p>
+            Перевірений каталог розширень: «очі» для агента й робота із зображеннями, дашборд
+            контексту з підрахунком токенів, машина часу по кроках діалогу. Встановлення —
+            <em>однією командою</em>, без збирання з джерел.
+          </p>
+        </li>
+        <li>
+          <h3>Український інтерфейс</h3>
+          <p>
+            Не машинний переклад поверх англійського: перекладено меню, підказки, стани й
+            повідомлення про помилки — те, що читаєш щодня. Англійська лишається
+            <em>перемикачем</em> на випадок звички.
+          </p>
+        </li>
+        <li>
+          <h3>Доступ через Telegram</h3>
+          <p>
+            Вхід підтверджується акаунтом Telegram: <em>пароль ми не бачимо</em>, лише
+            підтвердження від самого Telegram. Доступ відкритий учасникам обох спільнот
+            YT&nbsp;Cartel.
+          </p>
+        </li>
+        <li>
+          <h3>Повна портативність</h3>
+          <p>
+            Node і Electron лежать усередині папки. Нічого не пишеться в систему й реєстр,
+            дані живуть поруч у теці <code class="mono">data</code>. Папку можна
+            <em>перенести на іншу машину</em> разом з історією, ключами й плагінами.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ INSTALL ══ -->
+  <section class="sec" id="install">
+    <p class="sec-label">Як запустити</p>
+    <div class="sec-body">
+      <h2>Три кроки від завантаження до роботи</h2>
+      <p class="lede">Встановлювати нічого не треба — ні Node.js, ні Python, ні Git.</p>
+
+      <ol class="steps">
+        <li data-n="1">
+          <h3>Завантажте збірку для своєї системи</h3>
+          <p>
+            Для Windows — файл <code>.exe</code>, для macOS — <code>.dmg</code>.
+            Кнопки вгорі вже підсвітили потрібну; якщо ви на іншому пристрої, беріть другий рядок.
+          </p>
+        </li>
+        <li data-n="2">
+          <h3>Розпакуйте та відкрийте</h3>
+          <p>
+            <em>Windows:</em> запустіть завантажений файл і оберіть будь-яку папку,
+            бажано зі шляхом без кирилиці й пробілів.
+          </p>
+          <p>
+            <em>macOS:</em> відкрийте образ і перетягніть <b>Cartel Code</b> у «Програми».
+            Перший запуск — правою кнопкою → «Відкрити», бо збірка ще не підписана Apple.
+          </p>
+        </li>
+        <li data-n="3">
+          <h3>Увійдіть і оберіть робочу папку</h3>
+          <p>
+            При першому старті застосунок попросить підтвердити доступ через Telegram.
+            Далі вкажіть теку проєкту, з якою працюватиме агент, і можна писати перший запит.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══ CHANGELOG ══ -->
+  <section class="sec" id="changelog">
+    <p class="sec-label">Що змінилось</p>
+    <div class="sec-body">
+      <h2>Нотатки релізу</h2>
+      <p class="lede">Текст береться напряму з опису останнього релізу на GitHub.</p>
+      <div class="notes" id="notes">
+        <p class="nt-p"><span class="sk">Завантаження нотаток релізу з GitHub…</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQ ══ -->
+  <section class="sec" id="faq">
+    <p class="sec-label">Питання</p>
+    <div class="sec-body">
+      <h2>Коротко про головне</h2>
+
+      <div class="faq">
+        <details>
+          <summary>Чи потрібен встановлений Node.js або щось іще?</summary>
+          <div class="ans">
+            <p>Ні. Портативні Node.js і Electron лежать усередині збірки й використовуються
+            тільки нею. Системні версії не чіпаються, PATH не змінюється.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Де зберігаються мої дані та ключі?</summary>
+          <div class="ans">
+            <p>Локально, у теці <code>data</code> поруч із застосунком: профілі, історія сесій,
+            API-ключі, встановлені плагіни. Ця тека переноситься разом із папкою застосунку.</p>
+            <p>Запити до моделей ідуть напряму до вибраного вами провайдера через локальний
+            шлюз на <code>127.0.0.1</code>. Проміжних серверів немає.</p>
+          </div>
+        </details>
+        <details>
+          <summary>macOS каже, що застосунок від невідомого розробника</summary>
+          <div class="ans">
+            <p>Збірка поки не підписана сертифікатом Apple. Відкрийте її через праву кнопку →
+            «Відкрити» й підтвердіть дію. Якщо система все одно блокує — «Системні параметри» →
+            «Конфіденційність і безпека» → «Усе одно відкрити».</p>
+          </div>
+        </details>
+        <details>
+          <summary>Що потрібно для доступу?</summary>
+          <div class="ans">
+            <p>Членство в обох спільнотах YT&nbsp;Cartel. При першому запуску застосунок
+            відкриє сторінку входу Telegram. Після підтвердження доступ лишається на пристрої.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Як оновлюється застосунок?</summary>
+          <div class="ans">
+            <p>Cartel Code сам перевіряє нові релізи на GitHub і пропонує оновлення. Файл
+            завантажується лише з github.com, а перед запуском звіряються розмір і контрольна
+            сума SHA-256 — інакше оновлення не встановиться.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap ft-in">
+    <div class="ft-brand">
+      <svg viewBox="83 87 102 86" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="url(#g1)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="92,96 126,128 92,160"/>
+          <line x1="140" y1="164" x2="176" y2="164"/>
+        </g>
+      </svg>
+      <span>
+        <span class="nm">Cartel Code</span>
+        <span class="sub" id="ft-ver">Портативна збірка для Windows і macOS</span>
+      </span>
+    </div>
+    <nav class="ft-links" aria-label="Посилання">
+      <a href="#download">Завантажити</a>
+      <a href="https://github.com/gitkalenyuk/cartelcode/releases" id="lnk-rel-2" rel="noopener">Усі релізи</a>
+      <a href="https://github.com/gitkalenyuk/cartelcode" id="lnk-repo-2" rel="noopener">Репозиторій</a>
+    </nav>
+    <p class="ft-legal">
+      Cartel Code — оболонка над DeepSeek Harness. Застосунок не надсилає ваш код на сервери
+      проєкту: запити йдуть напряму до провайдера, ключі якого ви вказали самі.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── configuration ───────────────────────────────────────── */
+  var REPO         = 'gitkalenyuk/cartelcode';
+  var API_URL      = 'https://api.github.com/repos/' + REPO + '/releases/latest';
+  var RELEASES_URL = 'https://github.com/' + REPO + '/releases';
+  var TIMEOUT_MS   = 10000;
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ── OS detection ────────────────────────────────────────── */
+  function detectOS() {
+    var uad   = navigator.userAgentData;
+    var p     = (uad && uad.platform) || navigator.platform || '';
+    var ua    = navigator.userAgent || '';
+    var touch = navigator.maxTouchPoints || 0;
+    var hay   = (p + ' ' + ua);
+
+    /* Phones and tablets run neither build. Most visitors arrive from Telegram,
+       i.e. on a phone — marking the macOS row "ваша система" and handing them a
+       gold button for a .dmg they can never open is worse than saying nothing.
+       Unknown OS leaves both rows quiet but fully usable. */
+    if ((uad && uad.mobile === true) || /Android|iPhone|iPad|iPod/i.test(ua)) return null;
+    /* iPadOS in desktop mode reports Macintosh/MacIntel; only it reports touch. */
+    if (/Mac/i.test(hay) && touch > 1) return null;
+
+    /* Mac test must stay first: "Darwin" contains "win". */
+    if (/Mac|Darwin/i.test(hay)) return 'mac';
+    if (/Win/i.test(hay)) return 'win';
+    return null;
+  }
+  var OS = detectOS();
+
+  /* ── formatting ──────────────────────────────────────────── */
+  function fmtSize(bytes) {
+    if (!bytes && bytes !== 0) return '—';
+    var mb = bytes / 1048576;
+    var unit = 'МБ';
+    var val = mb;
+    if (mb >= 1024) { val = mb / 1024; unit = 'ГБ'; }
+    var s;
+    try {
+      s = new Intl.NumberFormat('uk-UA', { maximumFractionDigits: 1 }).format(val);
+    } catch (e) {
+      s = String(Math.round(val * 10) / 10).replace('.', ',');
+    }
+    return s + ' ' + unit;
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    try {
+      return new Intl.DateTimeFormat('uk-UA', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      }).format(d);
+    } catch (e) {
+      return d.toISOString().slice(0, 10);
+    }
+  }
+
+  /* ── DOM helpers ─────────────────────────────────────────── */
+  function setText(el, txt) {
+    if (!el) return;
+    el.textContent = txt;
+  }
+
+  function icon(kind) {
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.7');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    var path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', kind === 'ext'
+      ? 'M6.4 2.4H2.6v11h11V9.6M9.6 2.4h4v4M13.6 2.4 7.4 8.6'
+      : 'M8 1.6v8.5M4.6 7l3.4 3.4L11.4 7M2 13.2h12');
+    svg.appendChild(path);
+    return svg;
+  }
+
+  /* Only ever point a button at GitHub. The FAQ on this page promises it and the
+     in-app updater enforces the same allowlist; a tampered, cached or
+     proxy-injected API response must not be able to put javascript:, data: or a
+     foreign host behind the gold "Завантажити" button. Anything unexpected
+     degrades to the releases page rather than being trusted. */
+  var GH_URL = /^https:\/\/(github\.com|[a-z0-9-]+(\.[a-z0-9-]+)*\.githubusercontent\.com)\//i;
+  function safeUrl(u) {
+    return (typeof u === 'string' && GH_URL.test(u)) ? u : null;
+  }
+
+  /** Build one download button. */
+  function makeBtn(label, href, primary, ext) {
+    var a = document.createElement('a');
+    a.className = 'btn' + (primary ? ' btn-gold' : '') + (ext ? ' btn-sm' : '');
+    a.href = safeUrl(href) || RELEASES_URL;
+    a.rel = 'noopener';
+    a.appendChild(icon(ext ? 'ext' : 'dl'));
+    var s = document.createElement('span');
+    s.textContent = label;
+    a.appendChild(s);
+    return a;
+  }
+
+  function makeDisabled(label) {
+    var a = document.createElement('a');
+    a.className = 'btn';
+    a.href = RELEASES_URL;
+    a.rel = 'noopener';
+    a.setAttribute('aria-disabled', 'true');
+    var s = document.createElement('span');
+    s.textContent = label;
+    a.appendChild(s);
+    return a;
+  }
+
+  function status(kind, nodes) {
+    var box = $('mf-status');
+    if (!box) return;
+    box.hidden = false;
+    box.className = 'mf-note ' + kind;
+    box.textContent = '';
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '1.6');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    var c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', '8'); c.setAttribute('cy', '8'); c.setAttribute('r', '6.4');
+    var l = document.createElementNS(ns, 'path');
+    l.setAttribute('d', 'M8 4.9v3.6M8 11.1h.01');
+    svg.appendChild(c); svg.appendChild(l);
+    box.appendChild(svg);
+    var span = document.createElement('span');
+    nodes.forEach(function (n) { span.appendChild(n); });
+    box.appendChild(span);
+  }
+
+  function t(s) { return document.createTextNode(s); }
+  function bold(s) { var b = document.createElement('b'); b.textContent = s; return b; }
+  function link(s, href) {
+    var a = document.createElement('a');
+    a.href = href; a.rel = 'noopener'; a.textContent = s;
+    return a;
+  }
+
+  /* ── asset selection ─────────────────────────────────────── */
+  function usable(a) {
+    var n = (a.name || '').toLowerCase();
+    return !/\.(sha256|blockmap|yml|yaml|txt|asc|sig)$/.test(n);
+  }
+
+  function pick(assets, test) {
+    for (var i = 0; i < assets.length; i++) {
+      if (usable(assets[i]) && test((assets[i].name || '').toLowerCase())) return assets[i];
+    }
+    return null;
+  }
+
+  /* ── row rendering ───────────────────────────────────────── */
+  function fillRow(prefix, asset, isYou, extraAsset, extraLabel, mainLabel) {
+    var row  = $('row-' + prefix);
+    var fn   = $(prefix + '-fn');
+    var sz   = $(prefix + '-sz');
+    var you  = $(prefix + '-you');
+    var acts = $(prefix + '-acts');
+
+    if (row) row.classList.add('resolved');
+
+    if (!asset) {
+      setText(fn, 'збірка ще не опублікована');
+      setText(sz, '');
+      if (acts) { acts.textContent = ''; acts.appendChild(makeDisabled('Скоро')); }
+      return;
+    }
+
+    setText(fn, asset.name || '');
+    /* Two architecture buttons means two file sizes; showing only the first one
+       misstates the other download. Monospace is reserved for real data here. */
+    setText(sz, extraAsset
+      ? (mainLabel + ' ' + fmtSize(asset.size) + ' · ' + extraLabel + ' ' + fmtSize(extraAsset.size))
+      : fmtSize(asset.size));
+
+    if (isYou) {
+      if (row) row.classList.add('is-you');
+      if (you) you.hidden = false;
+    }
+
+    if (acts) {
+      acts.textContent = '';
+      if (extraAsset) {
+        // two architecture variants — both offered, neither guessed
+        acts.appendChild(makeBtn(mainLabel, asset.browser_download_url, !!isYou, false));
+        acts.appendChild(makeBtn(extraLabel, extraAsset.browser_download_url, false, false));
+      } else {
+        acts.appendChild(makeBtn('Завантажити', asset.browser_download_url, !!isYou, false));
+      }
+    }
+  }
+
+  /* ── release notes: plain-text renderer, textContent only ── */
+  function stripInline(s) {
+    return s
+      .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/__([^_]+)__/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/^\s*>\s?/, '')
+      .trim();
+  }
+
+  function renderNotes(body) {
+    var box = $('notes');
+    if (!box) return;
+    box.textContent = '';
+
+    var text = String(body || '').replace(/\r/g, '').trim();
+    if (!text) {
+      var e = document.createElement('p');
+      e.className = 'nt-empty';
+      e.textContent = 'Автор релізу не додав опис змін.';
+      box.appendChild(e);
+      return;
+    }
+
+    var lines = text.split('\n');
+    var ul = null;
+    var inFence = false;
+
+    for (var i = 0; i < lines.length; i++) {
+      var raw = lines[i];
+      var line = raw.trim();
+
+      if (/^```/.test(line)) { inFence = !inFence; ul = null; continue; }
+      if (inFence) {
+        var pre = document.createElement('p');
+        pre.className = 'nt-p mono';
+        pre.textContent = raw;
+        box.appendChild(pre);
+        continue;
+      }
+      if (!line) { ul = null; continue; }
+      if (/^([-*_])\1{2,}$/.test(line)) { ul = null; continue; }
+
+      var h = line.match(/^#{1,6}\s+(.+)$/);
+      if (h) {
+        ul = null;
+        var hd = document.createElement('p');
+        hd.className = 'nt-h';
+        hd.textContent = stripInline(h[1]);
+        box.appendChild(hd);
+        continue;
+      }
+
+      var li = line.match(/^(?:[-*+]|\d+[.)])\s+(.+)$/);
+      if (li) {
+        if (!ul) {
+          ul = document.createElement('ul');
+          ul.className = 'nt-ul';
+          box.appendChild(ul);
+        }
+        var item = document.createElement('li');
+        item.textContent = stripInline(li[1]);
+        ul.appendChild(item);
+        continue;
+      }
+
+      ul = null;
+      var p = document.createElement('p');
+      p.className = 'nt-p';
+      p.textContent = stripInline(line);
+      box.appendChild(p);
+    }
+
+    if (!box.childNodes.length) {
+      var f = document.createElement('p');
+      f.className = 'nt-empty';
+      f.textContent = 'Автор релізу не додав опис змін.';
+      box.appendChild(f);
+    }
+  }
+
+  /* ── empty / error states ────────────────────────────────── */
+  function stateNoRelease() {
+    setText($('ver'), 'ще немає');
+    setText($('rel-date'), '');
+    fillRow('win', null, OS === 'win');
+    fillRow('mac', null, OS === 'mac');
+    renderNotes('');
+    status('warn', [
+      bold('Перший реліз ще не опубліковано. '),
+      t('Щойно збірка з\'явиться, кнопки стануть активними автоматично. Стежити можна на '),
+      link('сторінці релізів', RELEASES_URL),
+      t('.')
+    ]);
+  }
+
+  function stateError() {
+    setText($('ver'), 'н/д');
+    setText($('rel-date'), '');
+    fillRow('win', null, OS === 'win');
+    fillRow('mac', null, OS === 'mac');
+    var box = $('notes');
+    if (box) {
+      box.textContent = '';
+      var p = document.createElement('p');
+      p.className = 'nt-empty';
+      p.textContent = 'Не вдалося завантажити нотатки релізу.';
+      box.appendChild(p);
+    }
+    status('err', [
+      bold('Не вдалося отримати дані з GitHub. '),
+      t('Можливо, немає з\'єднання або перевищено ліміт запитів. Завантажте збірку напряму зі '),
+      link('сторінки релізів', RELEASES_URL),
+      t('.')
+    ]);
+  }
+
+  /* ── main ────────────────────────────────────────────────── */
+  function apply(rel) {
+    var assets = (rel && rel.assets) || [];
+    var tag = rel.tag_name || rel.name || '';
+
+    setText($('ver'), tag ? (/^v/i.test(tag) ? tag : 'v' + tag) : '—');
+    setText($('rel-date'), fmtDate(rel.published_at || rel.created_at));
+
+    var ftv = $('ft-ver');
+    if (ftv && tag) {
+      ftv.textContent = 'Версія ' + tag.replace(/^v/i, '') + ' · Windows і macOS';
+    }
+
+    /* Windows: any installer/portable .exe (or .zip fallback) */
+    var win = pick(assets, function (n) { return /\.exe$/.test(n); })
+           || pick(assets, function (n) { return /win|windows/.test(n) && /\.zip$/.test(n); });
+
+    /* macOS: prefer explicit arch builds, else a single/universal .dmg */
+    var macArm = pick(assets, function (n) { return /\.dmg$/.test(n) && /(arm64|aarch64|apple[-_ ]?silicon)/.test(n); });
+    var macX64 = pick(assets, function (n) { return /\.dmg$/.test(n) && /(x64|x86[-_]?64|intel|amd64)/.test(n); });
+    var macAny = pick(assets, function (n) { return /\.dmg$/.test(n); });
+
+    var macMain = macArm || macX64 || macAny;
+    var macAlt  = null, mainLabel = 'Завантажити', altLabel = '';
+
+    if (macArm && macX64) {
+      macMain = macArm; macAlt = macX64;
+      mainLabel = 'Apple Silicon';
+      altLabel  = 'Intel';
+    }
+
+    fillRow('win', win, OS === 'win');
+    fillRow('mac', macMain, OS === 'mac', macAlt, altLabel, mainLabel);
+
+    renderNotes(rel.body);
+
+    if (!win && !macMain) {
+      status('warn', [
+        bold('У цьому релізі ще немає готових збірок. '),
+        t('Перевірте '),
+        link('сторінку релізів', RELEASES_URL),
+        t(' — файли могли ще не завантажитись.')
+      ]);
+    } else if (!win || !macMain) {
+      status('warn', [
+        t('У релізі ' + (tag || '') + ' поки немає збірки для '),
+        bold(!win ? 'Windows' : 'macOS'),
+        t('. Решта файлів — на '),
+        link('сторінці релізів', RELEASES_URL),
+        t('.')
+      ]);
+    }
+  }
+
+  function load() {
+    var ctl = null, timer = null;
+    try {
+      ctl = new AbortController();
+      timer = setTimeout(function () { ctl.abort(); }, TIMEOUT_MS);
+    } catch (e) { ctl = null; }
+
+    var opts = { headers: { 'Accept': 'application/vnd.github+json' } };
+    if (ctl) opts.signal = ctl.signal;
+
+    if (typeof fetch !== 'function') { stateError(); return; }
+
+    fetch(API_URL, opts)
+      .then(function (r) {
+        if (timer) clearTimeout(timer);
+        if (r.status === 404) { stateNoRelease(); return null; }
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (rel) {
+        if (!rel) return;
+        apply(rel);
+      })
+      .catch(function () {
+        if (timer) clearTimeout(timer);
+        stateError();
+      });
+  }
+
+  /* pre-mark the detected row before data lands, so nothing shifts later */
+  (function preMark() {
+    if (!OS) return;
+    var row = $('row-' + OS), chip = $(OS + '-you');
+    if (row) row.classList.add('is-you');
+    if (chip) chip.hidden = false;
+  })();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', load);
+  } else {
+    load();
+  }
+})();
+</script>
+</body>
+</html>
