@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Довідка — Cartel Code</title>
+<meta name="description" content="Детальна довідка Cartel Code: провайдери й пул ключів, системний промпт, зір моделей, плагіни, пресети агента, дозволи, приватність і оновлення." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23140f0c'/%3E%3Cg fill='none' stroke='%23ff7a3d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='7,7 12,12 7,17'/%3E%3Cline x1='13.5' y1='17' x2='18' y2='17'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --background:oklch(16% .008 60); --foreground:oklch(95% .01 80);
+  --card:oklch(20% .009 60); --muted:oklch(24% .011 60);
+  --muted-foreground:oklch(68% .015 70); --border:oklch(32% .012 60);
+  --ember:oklch(70% .19 45); --ember-soft:oklch(82% .14 65);
+  --ok:oklch(72% .16 150); --warn:oklch(78% .15 85); --bad:oklch(62% .18 25);
+  --gradient-ember:linear-gradient(135deg,var(--ember-soft),var(--ember));
+  --radius:.75rem;
+  --font-display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-sans);
+  font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ember-soft)}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--muted);padding:2px 6px;border-radius:5px;color:var(--ember-soft)}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:color-mix(in oklab,var(--background) 85%,transparent);
+  border-bottom:1px solid color-mix(in oklab,var(--border) 60%,transparent)}
+.nav{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:18px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-display);font-weight:700;color:var(--foreground)}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:var(--gradient-ember);display:grid;place-items:center}
+.brand .mark svg{width:17px;height:17px}
+.brand .t2{color:var(--ember)}
+.nav .sp{margin-left:auto;display:flex;gap:8px}
+.nav .sp a{padding:7px 13px;border:1px solid var(--border);border-radius:9px;text-decoration:none;
+  color:var(--foreground);font-size:14px}
+.nav .sp a:hover{border-color:color-mix(in oklab,var(--ember) 50%,var(--border))}
+.shell{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:242px minmax(0,1fr);gap:44px}
+@media (max-width:940px){.shell{grid-template-columns:1fr;gap:0}aside{display:none}}
+aside{position:sticky;top:64px;align-self:start;height:calc(100vh - 64px);overflow-y:auto;padding:30px 0 40px}
+aside b{display:block;font:600 11px/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ember);margin:0 0 12px 10px}
+aside a{display:block;padding:7px 11px;border-radius:8px;text-decoration:none;color:var(--muted-foreground);font-size:14px}
+aside a:hover{color:var(--foreground);background:var(--muted)}
+main{padding:38px 0 90px;min-width:0}
+.lead{color:var(--muted-foreground);font-size:17.5px;margin:14px 0 0;max-width:70ch}
+h1{font-size:clamp(30px,4.4vw,42px)}
+h2{font-size:clamp(22px,3vw,29px);margin:56px 0 0;padding-top:14px;scroll-margin-top:80px}
+h2 + p{margin-top:14px}
+h3{font-size:18.5px;margin:30px 0 0}
+h3 + p, h3 + ul, h3 + .box{margin-top:10px}
+p{margin:14px 0 0;max-width:74ch}
+ul,ol{margin:12px 0 0;padding-left:22px;max-width:74ch}
+li{margin:7px 0}
+.rule{height:1px;background:var(--border);margin:0;border:0}
+.box{border:1px solid var(--border);border-radius:calc(var(--radius) + 2px);background:var(--card);
+  padding:18px 20px;margin-top:18px;max-width:74ch}
+.box.tip{border-color:color-mix(in oklab,var(--ember) 38%,var(--border));background:color-mix(in oklab,var(--ember) 7%,transparent)}
+.box.warn{border-color:color-mix(in oklab,var(--warn) 34%,var(--border));background:color-mix(in oklab,var(--warn) 6%,transparent)}
+.box b{display:block;font-family:var(--font-display);font-size:14.5px;margin-bottom:6px}
+.box p{margin-top:0}
+table{width:100%;max-width:74ch;border-collapse:collapse;margin-top:18px;font-size:14.5px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-family:var(--font-display);font-size:13px;color:var(--muted-foreground);font-weight:600;
+  text-transform:uppercase;letter-spacing:.05em}
+tbody tr:last-child td{border-bottom:0}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:999px;font-size:12.5px;
+  border:1px solid var(--border);white-space:nowrap}
+.pill .d{width:7px;height:7px;border-radius:50%}
+.pill.ok{color:var(--ok);border-color:color-mix(in oklab,var(--ok) 34%,transparent)} .pill.ok .d{background:var(--ok)}
+.pill.warn{color:var(--warn);border-color:color-mix(in oklab,var(--warn) 34%,transparent)} .pill.warn .d{background:var(--warn)}
+.pill.bad{color:var(--bad);border-color:color-mix(in oklab,var(--bad) 34%,transparent)} .pill.bad .d{background:var(--bad)}
+details{border:1px solid var(--border);border-radius:calc(var(--radius) + 2px);background:var(--card);margin-top:10px;max-width:74ch}
+summary{cursor:pointer;padding:15px 18px;font-family:var(--font-display);font-weight:600;font-size:15.5px;
+  list-style:none;display:flex;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;color:var(--ember);font:400 20px/1 var(--font-mono)}
+details[open] summary::after{content:"−"}
+details p{padding:0 18px 16px;margin-top:0;color:var(--muted-foreground)}
+footer{border-top:1px solid var(--border);margin-top:40px}
+.foot{max-width:1180px;margin:0 auto;padding:32px 24px 46px;display:flex;flex-wrap:wrap;gap:18px;
+  justify-content:space-between;color:var(--muted-foreground);font-size:14px}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--ember)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="./">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="oklch(18% .02 55)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,7 12,12 7,17"/><line x1="13.5" y1="17" x2="18" y2="17"/></svg></span>
+      <span><span>cartel</span><span class="t2">code</span></span>
+    </a>
+    <div class="sp">
+      <a href="./">На головну</a>
+      <a href="https://github.com/gitkalenyuk/cartelcode/releases" target="_blank" rel="noopener">Завантажити</a>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside>
+    <b>Довідка</b>
+    <a href="#how">Як це влаштовано</a>
+    <a href="#access">Доступ і перший запуск</a>
+    <a href="#providers">Провайдери й моделі</a>
+    <a href="#keys">Пул ключів і заморозка</a>
+    <a href="#prompt">Системний промпт</a>
+    <a href="#models">Список моделей</a>
+    <a href="#vision">Зір: робота з зображеннями</a>
+    <a href="#presets">Пресети агента</a>
+    <a href="#permissions">Дозволи</a>
+    <a href="#plugins">Плагіни</a>
+    <a href="#ui">Інтерфейс</a>
+    <a href="#data">Дані та приватність</a>
+    <a href="#updates">Оновлення</a>
+    <a href="#trouble">Якщо щось не працює</a>
+  </aside>
+
+  <main>
+    <h1>Довідка Cartel Code</h1>
+    <p class="lead">Детально про те, що за що відповідає: як ходять запити, як працює пул ключів,
+      навіщо системний промпт, як увімкнути зір моделі та де лежать ваші дані.</p>
+
+    <h2 id="how">Як це влаштовано</h2>
+    <p>Cartel Code — це три частини в одній теці, які спілкуються між собою лише через
+      локальну мережу вашого комп'ютера (<code>127.0.0.1</code>):</p>
+    <table>
+      <thead><tr><th>Частина</th><th>За що відповідає</th></tr></thead>
+      <tbody>
+        <tr><td><b>Оболонка</b></td><td>Вікно застосунку, українська мова, меню, підказки, оновлення.</td></tr>
+        <tr><td><b>Агент</b></td><td>Читає й пише файли, запускає команди, викликає інструменти й плагіни.</td></tr>
+        <tr><td><b>Шлюз</b></td><td>Приймає запити агента до моделі, підставляє ключ із пулу й веде облік станів ключів.</td></tr>
+      </tbody>
+    </table>
+    <p>Запит до моделі йде так: агент формує повідомлення → віддає локальному шлюзу →
+      шлюз бере наступний живий ключ і надсилає запит <b>напряму до вашого провайдера</b>
+      (OpenRouter, DeepSeek, Ollama — що ви налаштували). Проміжних серверів немає:
+      ключі й переписка не проходять через жодну сторонню службу.</p>
+
+    <h2 id="access">Доступ і перший запуск</h2>
+    <p>Вхід у застосунок — <b>тільки через Telegram</b>. Пароля чи пошти не існує.
+      Щоб застосунок запустився, потрібно бути учасником обох спільнот YT Cartel:
+      <a href="https://t.me/YT_cartell" target="_blank" rel="noopener">каналу</a> та
+      <a href="https://t.me/+Ovf7rTg8ClBkOGQy" target="_blank" rel="noopener">чату</a>.</p>
+    <p>При першому запуску відкриється сторінка входу Telegram у вашому браузері.
+      Ви обираєте акаунт і підтверджуєте вхід — застосунок отримує назад тільки
+      підтвердження від Telegram. <b>Пароль і код ми не бачимо.</b></p>
+    <p>Далі членство перевіряється періодично, поки застосунок відкритий. Якщо вийти зі
+      спільноти, застосунок повернеться до екрана входу. Тимчасові збої мережі не рахуються
+      за вихід — доступ не зникне через хвилинну відсутність інтернету.</p>
+    <div class="box tip">
+      <b>Змінити акаунт</b>
+      <p>Внизу бічної панелі натисніть на своє ім'я → «Вийти / змінити акаунт».
+        Застосунок перезапуститься і запропонує увійти знову.</p>
+    </div>
+
+    <h2 id="providers">Провайдери й моделі</h2>
+    <p>Провайдер — це джерело моделей: OpenRouter, DeepSeek, Ollama, будь-який сервіс
+      із API, сумісним з OpenAI. Додати свого можна в
+      <b>Налаштування → Моделі → «Додати власного провайдера»</b>.</p>
+    <table>
+      <thead><tr><th>Поле</th><th>Що вписувати</th></tr></thead>
+      <tbody>
+        <tr><td><b>ID провайдера</b></td><td>Коротка назва латиницею без пробілів, напр. <code>openrouter</code>. Використовується всередині як ідентифікатор.</td></tr>
+        <tr><td><b>Base URL</b></td><td>Адреса API провайдера — та, що йде <b>перед</b> <code>/chat/completions</code>. Напр. <code>https://openrouter.ai/api/v1</code>.</td></tr>
+        <tr><td><b>API-ключі</b></td><td>Один або багато ключів, кожен з нового рядка. Докладніше — нижче.</td></tr>
+        <tr><td><b>Заморозка (хв)</b></td><td>Скільки часу ключ «відпочиває» після вичерпаної квоти. Типово 60.</td></tr>
+        <tr><td><b>Системний промпт</b></td><td>Необов'язково. Текст, що додається до кожного запиту цього провайдера.</td></tr>
+        <tr><td><b>Моделі</b></td><td>Список моделей; можна завантажити з провайдера однією кнопкою.</td></tr>
+      </tbody>
+    </table>
+    <p>Після збереження провайдер з'являється у списку як звичайний, а його моделі —
+      у виборі моделі біля поля вводу. Порядок провайдерів можна змінити перетягуванням
+      (застосується після перезапуску).</p>
+
+    <h2 id="keys">Пул ключів і заморозка</h2>
+    <p>Це головна причина, заради якої збирався застосунок. Замість одного ключа ви
+      вставляєте <b>скільки завгодно</b> — по одному в рядок. Далі шлюз усе робить сам.</p>
+
+    <h3>Ротація</h3>
+    <p>Кожен новий запит іде на наступний живий ключ по колу. Навантаження й ліміти
+      розподіляються рівномірно, і жоден ключ не «вигорає» першим.</p>
+
+    <h3>Стани ключа</h3>
+    <table>
+      <thead><tr><th>Стан</th><th>Коли виникає</th><th>Що робить шлюз</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pill ok"><span class="d"></span>робочий</span></td>
+          <td>Ключ відповідає нормально.</td>
+          <td>Бере участь у ротації.</td>
+        </tr>
+        <tr>
+          <td><span class="pill warn"><span class="d"></span>у заморозці</span></td>
+          <td>Провайдер відповів, що вичерпано квоту або перевищено ліміт запитів.</td>
+          <td>Ключ відкладається на заданий час, запит одразу йде на наступний.</td>
+        </tr>
+        <tr>
+          <td><span class="pill bad"><span class="d"></span>зламаний</span></td>
+          <td>Провайдер відповів, що ключ недійсний або не має прав.</td>
+          <td>Відкладається надовго — такий ключ зазвичай треба замінити.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Оживлення</h3>
+    <p>Заморожений ключ не викидається назавжди. Коли живих ключів не лишилось, шлюз
+      надсилає перевірочний запит на відкладені — і якщо провайдер відповідає нормально,
+      ключ одразу повертається в ротацію.</p>
+    <div class="box tip">
+      <b>Навіщо це потрібно</b>
+      <p>Найчастіша причина «мертвого» ключа — не сам ключ, а <b>обрана модель</b>.
+        Якщо вибрати платну модель на безкоштовному ключі, провайдер відмовить, і без
+        оживлення весь пул виглядав би зламаним. Перевірочний запит відрізняє
+        «ключ поганий» від «модель не та».</p>
+    </div>
+    <p>Стан кожного ключа видно прямо в редакторі провайдера: кольорова позначка,
+      кількість успішних запитів і остання помилка. Ключі можна додавати й видаляти
+      поштучно, не чіпаючи решту.</p>
+
+    <h2 id="prompt">Системний промпт</h2>
+    <p>Системний промпт — це текст, який автоматично додається <b>перед</b> вашим
+      повідомленням у кожному запиті до цього провайдера. Модель бачить його як
+      інструкцію, що діє постійно.</p>
+    <p>Навіщо це на рівні провайдера:</p>
+    <ul>
+      <li>задати стиль відповідей — мову, тон, формат;</li>
+      <li>додати сталі правила для конкретного джерела моделей;</li>
+      <li>компенсувати поведінку моделі, яка інакше ігнорує частину інструкцій.</li>
+    </ul>
+    <p>Промпт зберігається разом із провайдером і застосовується до <b>всіх</b> його моделей.
+      Порожнє поле означає, що нічого не додається.</p>
+    <div class="box warn">
+      <b>Про що варто пам'ятати</b>
+      <p>Системний промпт витрачає токени в кожному запиті й може конфліктувати
+        з інструкціями самого агента. Тримайте його коротким.</p>
+    </div>
+
+    <h2 id="models">Список моделей: що показувати</h2>
+    <p>Провайдер часто віддає десятки моделей, з яких вам потрібні одиниці. Тому кожна
+      модель у редакторі — це перемикач:</p>
+    <ul>
+      <li><span class="pill ok"><span class="d"></span>зелена</span> — показується у виборі моделі;</li>
+      <li><span class="pill bad"><span class="d"></span>червона</span> — прихована, у списку її не буде.</li>
+    </ul>
+    <p>Клацання перемикає стан. Приховані моделі не видаляються — вони лишаються в
+      налаштуваннях, і їх можна повернути будь-коли. Так зручно ховати платні моделі,
+      щоб не витратити квоту випадково.</p>
+    <p>Кнопка завантаження моделей забирає повний список у провайдера. Зберегти можна,
+      коли зеленою лишилась щонайменше одна модель.</p>
+
+    <h2 id="vision">Зір: робота з зображеннями</h2>
+    <p>Не всі моделі вміють дивитися на картинки. Якщо надіслати зображення моделі без
+      зору, запит просто не спрацює. Тому зір вмикається <b>окремо для кожної моделі</b>.</p>
+    <p>У редакторі провайдера біля кожної моделі є позначка <b>🖼</b>. Увімкнена —
+      застосунок вважає, що ця модель приймає зображення, і надсилає їх разом із текстом.
+      Вимкнена — зображення до цієї моделі не потраплять.</p>
+    <div class="box tip">
+      <b>Як зрозуміти, чи має модель зір</b>
+      <p>Дивіться опис моделі у свого провайдера: зазвичай це позначено словами
+        vision, multimodal або «image input». Якщо не впевнені — увімкніть і надішліть
+        одну картинку: модель або відповість, або поверне зрозумілу помилку.</p>
+    </div>
+
+    <h2 id="presets">Пресети агента</h2>
+    <p>Пресет визначає, <b>що агент взагалі вміє робити</b> — набір інструментів і стиль роботи.</p>
+    <table>
+      <thead><tr><th>Пресет</th><th>Для чого</th></tr></thead>
+      <tbody>
+        <tr><td><b>Стандартний</b></td><td>Повний набір: редагування файлів, оболонка, пошук по файлах і в інтернеті, навички, планування, субагенти.</td></tr>
+        <tr><td><b>Code</b></td><td>Те саме, але інструменти доступні через програмний інтерфейс — модель може поєднати кілька дій в одній програмі. Швидше на складних задачах.</td></tr>
+        <tr><td><b>Мінімальний</b></td><td>Лише два інструменти: оболонка й редактор файлів. Найменше зайвого в контексті.</td></tr>
+        <tr><td><b>Creator</b></td><td>Для створення власних пресетів: усе зі стандартного плюс інспекція середовища й експерименти з плагінами.</td></tr>
+      </tbody>
+    </table>
+    <div class="box warn">
+      <b>Пресет обирається на старті сесії</b>
+      <p>Змінити режим посеред активної розмови не можна — набір інструментів агента
+        збирається в момент створення сесії. Щоб працювати в іншому режимі, почніть нову сесію.</p>
+    </div>
+
+    <h2 id="permissions">Дозволи</h2>
+    <p>Наскільки вільно агент може діяти з вашими файлами й терміналом:</p>
+    <ul>
+      <li><b>Лише читання</b> — дивиться, але нічого не змінює;</li>
+      <li><b>Запис у робочий простір</b> — змінює файли лише у вибраній теці проєкту;</li>
+      <li><b>Повний доступ</b> — без обмежень.</li>
+    </ul>
+    <p>Режим перемикається біля поля вводу й діє на нові сесії. Окремі небезпечні дії
+      застосунок додатково перепитує перед виконанням.</p>
+
+    <h2 id="plugins">Плагіни</h2>
+    <p>Усе в застосунку — плагіни: від бічної панелі до веб-пошуку. У списку їх 168,
+      кожен із коротким описом прямо в картці.</p>
+    <p><b>Налаштування → Плагіни → Список плагінів</b>: розгорніть картку, щоб побачити,
+      за що плагін відповідає, його стан і назву пакета (клікабельну — веде на репозиторій).
+      Кнопка <b>⏻ Вимкнути / Увімкнути</b> змінює стан.</p>
+    <div class="box warn">
+      <b>Зміни застосовуються після перезапуску</b>
+      <p>Плагіни збираються під час старту, тому після перемикання застосунок запропонує
+        перезапуститись. Якщо вимкнути важливий плагін інтерфейсу, вигляд застосунку зміниться —
+        поверніть його назад тим самим перемикачем.</p>
+    </div>
+    <p>Серед корисних: веб-пошук для агента, бічна панель з файловим провідником і
+      терміналом, відмотування діалогу разом зі станом файлів, імпорт сесій,
+      редагування вже надісланих повідомлень.</p>
+
+    <h2 id="ui">Інтерфейс</h2>
+    <h3>Мова</h3>
+    <p>Українська за замовчуванням, English — перемикачем у <b>Налаштування → Загальні</b>.
+      Перекладено меню, підказки, стани, помилки й описи плагінів.</p>
+    <h3>Тема</h3>
+    <p>Світла, темна або як у системі. Палітра підібрана під обидві теми окремо.</p>
+    <h3>Підказки</h3>
+    <p>Біля багатьох елементів є значок <b>ⓘ</b> — наведіть, щоб побачити, що це таке
+      й навіщо. Підказки показуються мовою інтерфейсу.</p>
+    <h3>Бічні панелі</h3>
+    <p>Права панель — файловий провідник, вкладки, керування версіями. Нижня —
+      вбудований термінал. Обидві згортаються; розміри запам'ятовуються.</p>
+    <h3>Меню внизу</h3>
+    <p>Ваш акаунт, версія застосунку, перевірка оновлень, налаштування, імпорт сесій
+      і вихід з акаунта — усе в одному місці внизу бічної панелі.</p>
+
+    <h2 id="data">Дані та приватність</h2>
+    <p>Усе, що ви створюєте, лишається на вашому комп'ютері:</p>
+    <ul>
+      <li>історія сесій і вкладення;</li>
+      <li>налаштування провайдерів і API-ключі;</li>
+      <li>встановлені плагіни й профілі.</li>
+    </ul>
+    <p>Запити до моделі йдуть <b>напряму до вашого провайдера</b> через локальний шлюз.
+      Ми не бачимо ані ваших ключів, ані переписки, ані коду — і не маємо технічної
+      можливості їх отримати.</p>
+    <p>Єдине, що виходить назовні поза вашим провайдером — перевірка членства в спільнотах
+      під час входу та звірка версії при оновленні.</p>
+    <div class="box tip">
+      <b>Портативність</b>
+      <p>У системний реєстр нічого не пишеться. Дані живуть у теці застосунку — її можна
+        перенести на інший комп'ютер разом з історією, ключами й плагінами.</p>
+    </div>
+
+    <h2 id="updates">Оновлення</h2>
+    <p>У меню внизу бічної панелі — «Перевірити оновлення». Застосунок звіряє свою версію
+      з останнім релізом на GitHub і, якщо є новіша, пропонує встановити.</p>
+    <p>Перед запуском інсталятора виконуються перевірки:</p>
+    <ul>
+      <li>файл завантажується <b>лише з github.com</b>;</li>
+      <li>звіряється розмір;</li>
+      <li>звіряється контрольна сума SHA-256 з опублікованою в релізі.</li>
+    </ul>
+    <p>Якщо контрольної суми немає або вона не збіглася — оновлення скасовується.
+      Контрольну суму можна перевірити й самостійно, вона лежить поруч із файлом у релізі.</p>
+
+    <h2 id="trouble">Якщо щось не працює</h2>
+    <details><summary>Windows попереджає, що видавця не перевірено</summary>
+      <p>Збірка не підписана сертифікатом коду. У вікні SmartScreen: «Докладніше» →
+        «Виконати попри все». За бажанням звірте SHA-256 з опублікованою в релізі.</p></details>
+    <details><summary>Запити не проходять, усі ключі червоні</summary>
+      <p>Найчастіше причина — обрана модель, а не ключі. Перевірте, чи доступна ця модель
+        на вашому тарифі, і спробуйте іншу: перевірочний запит поверне ключі в ротацію
+        автоматично.</p></details>
+    <details><summary>Модель не приймає зображення</summary>
+      <p>Увімкніть позначку 🖼 навпроти цієї моделі в редакторі провайдера. Якщо модель
+        не має зору, зображення надсилати не вийде — оберіть іншу.</p></details>
+    <details><summary>Не можу змінити режим агента в поточній розмові</summary>
+      <p>Так і задумано: набір інструментів фіксується на старті сесії. Почніть нову сесію
+        з потрібним пресетом.</p></details>
+    <details><summary>Застосунок просить увійти знову</summary>
+      <p>Перевірте, чи ви досі учасник обох спільнот. Якщо щойно приєдналися — зачекайте
+        кілька секунд: Telegram оновлює членство не миттєво.</p></details>
+    <details><summary>Вимкнув плагін, інтерфейс змінився</summary>
+      <p>Увімкніть його назад у списку плагінів і перезапустіть застосунок.</p></details>
+  </main>
+</div>
+
+<footer>
+  <div class="foot">
+    <span>Cartel Code — портативний агент для коду з українським інтерфейсом.</span>
+    <span>
+      <a href="./">Головна</a> ·
+      <a href="https://github.com/gitkalenyuk/cartelcode/releases" target="_blank" rel="noopener">Релізи</a> ·
+      <a href="https://t.me/YT_cartell" target="_blank" rel="noopener">Канал</a> ·
+      <a href="https://t.me/+Ovf7rTg8ClBkOGQy" target="_blank" rel="noopener">Чат</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

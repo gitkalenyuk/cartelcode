@@ -137,15 +137,17 @@ section{padding:76px 0}
 .builds{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width:760px){.builds{grid-template-columns:1fr}}
 .build{border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);background:var(--card);
-  padding:22px;display:flex;align-items:center;gap:16px;transition:.15s}
+  padding:20px 22px;display:flex;align-items:center;gap:16px;transition:.15s;min-height:96px}
 .build.is-yours{border-color:color-mix(in oklab,var(--ember) 55%,var(--border));box-shadow:var(--glow-ember)}
 .build .os{width:44px;height:44px;border-radius:12px;background:var(--muted);display:grid;place-items:center;flex:none}
 .build .os svg{width:22px;height:22px;fill:var(--foreground)}
 .build .meta{flex:1;min-width:0}
-.build .meta b{display:block;font-family:var(--font-display);font-size:17px}
-.build .meta span{display:block;font:12.5px/1.5 var(--font-mono);color:var(--muted-foreground);margin-top:3px;word-break:break-word}
-.yours{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font:600 10.5px/1.6 var(--font-sans);
-  text-transform:uppercase;letter-spacing:.05em;background:color-mix(in oklab,var(--ember) 18%,transparent);color:var(--ember-soft)}
+.build .meta .row1{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.build .meta .nm{font-family:var(--font-display);font-size:17px;font-weight:700}
+.build .meta .sub{display:block;font:12.5px/1.5 var(--font-mono);color:var(--muted-foreground);margin-top:5px;word-break:break-word}
+.build .meta .yours{flex:none;padding:3px 9px;border-radius:999px;font:600 10px/1.5 var(--font-sans);
+  text-transform:uppercase;letter-spacing:.06em;background:color-mix(in oklab,var(--ember) 20%,transparent);
+  color:var(--ember-soft);border:1px solid color-mix(in oklab,var(--ember) 32%,transparent)}
 .dlwrap{display:flex;flex-direction:column;gap:7px;align-items:flex-end}
 .dl{padding:10px 17px;border-radius:10px;font:600 14px/1 var(--font-sans);text-decoration:none;white-space:nowrap}
 .dl-on{background:var(--gradient-ember);color:oklch(18% .02 55)}
@@ -217,6 +219,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       <a href="#start" data-t="navStart"></a>
       <a href="#faq" data-t="navFaq"></a>
       <a href="#builds" data-t="navReleases"></a>
+      <a href="./docs.html" data-t="navDocs"></a>
     </nav>
     <div class="right">
       <div class="lang" role="group" aria-label="Language">
@@ -275,12 +278,18 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       <div class="builds">
         <div class="build" id="row-win">
           <div class="os"><svg viewBox="0 0 24 24"><path d="M3 5.5 10 4.6v6.9H3zm0 13L10 19.4v-6.8H3zM11 4.4 21 3v8.5H11zm0 15.2L21 21v-8.4H11z"/></svg></div>
-          <div class="meta"><b>Windows<span class="yours" id="yours-win" hidden></span></b><span id="meta-win"><span class="sk"></span></span></div>
+          <div class="meta">
+            <div class="row1"><span class="nm">Windows</span><span class="yours" id="yours-win" hidden></span></div>
+            <span class="sub" id="meta-win"><span class="sk"></span></span>
+          </div>
           <div class="dlwrap" id="dl-win"><span class="dl dl-off" data-t="soon"></span></div>
         </div>
         <div class="build" id="row-mac">
           <div class="os"><svg viewBox="0 0 24 24"><path d="M16.4 12.8c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8s-1.8-.8-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.7 2.3 2.9 2.2 1.2 0 1.6-.7 3-.7s1.8.7 3 .7 2-1.1 2.8-2.1c.9-1.2 1.2-2.4 1.3-2.4s-2.5-1-2.5-3.7zM14.2 5.9c.6-.8 1.1-1.9 1-3-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.9-1.4z"/></svg></div>
-          <div class="meta"><b>macOS<span class="yours" id="yours-mac" hidden></span></b><span id="meta-mac"><span class="sk"></span></span></div>
+          <div class="meta">
+            <div class="row1"><span class="nm">macOS</span><span class="yours" id="yours-mac" hidden></span></div>
+            <span class="sub" id="meta-mac"><span class="sk"></span></span>
+          </div>
           <div class="dlwrap" id="dl-mac"><span class="dl dl-off" data-t="soon"></span></div>
         </div>
       </div>
@@ -360,7 +369,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 
   var T = {
     uk: {
-      navFeatures:'Можливості', navStart:'Запуск', navFaq:'Питання', navReleases:'Релізи',
+      navFeatures:'Можливості', navStart:'Запуск', navFaq:'Питання', navReleases:'Релізи', navDocs:'Довідка',
       eyebrow:'Портативний агент для коду',
       h1a:'Пише, читає й править код', h1b:'разом з вами',
       lead:'Cartel Code — десктопний застосунок з власним шлюзом API, пулом ключів, 168 плагінами і повністю українською оболонкою. Node і Electron уже всередині: розпакували — працює.',
@@ -380,7 +389,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       pFeat:'Не перелік модних слів, а те, що справді відрізняє цю збірку від голого фреймворку.',
       kStart:'Як запустити', hStart:'Три кроки від завантаження до роботи',
       pStart:'Встановлювати нічого не треба — ні Node.js, ні Python, ні Git.',
-      kFaq:'Питання', hFaq:'Коротко про головне', pFaq:'',
+      kFaq:'Питання', hFaq:'Коротко про головне', pFaq:'Розгорніть відповідь. Детальніше про кожен механізм — у довідці.',
       footAbout:'Портативний агент для коду з українським інтерфейсом.',
       footRepo:'Репозиторій', footRel:'Релізи', footChannel:'Канал', footChat:'Чат',
       joinChannel:'Приєднатися до каналу', joinChat:'Приєднатися до чату',
@@ -401,11 +410,15 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
         ['Де зберігаються мої дані та ключі?','Локально, у теці даних застосунку: профілі, історія сесій, API-ключі, плагіни. Запити йдуть напряму до провайдера через локальний шлюз на 127.0.0.1.'],
         ['macOS каже, що застосунок від невідомого розробника','Збірка поки не підписана сертифікатом Apple. Права кнопка → «Відкрити». Якщо блокує — «Системні параметри» → «Конфіденційність і безпека» → «Усе одно відкрити».'],
         ['Що потрібно для доступу?','Членство в обох спільнотах YT Cartel. При першому запуску відкриється сторінка входу Telegram; після підтвердження доступ лишається на пристрої.'],
-        ['Як оновлюється застосунок?','Cartel Code сам перевіряє релізи на GitHub. Файл завантажується лише з github.com, а перед запуском звіряються розмір і SHA-256.']
+        ['Як оновлюється застосунок?','Cartel Code сам перевіряє релізи на GitHub. Файл завантажується лише з github.com, а перед запуском звіряються розмір і SHA-256.'],
+        ['Навіщо кілька ключів на одного провайдера?','Ключі вставляються по одному в рядок і працюють по колу: кожен новий запит іде на наступний живий. Якщо провайдер відповів, що квота вичерпана, ключ відкладається на заданий час, а запит одразу йде далі. Коли живих не лишилось, застосунок надсилає перевірочний запит на відкладені й повертає в роботу ті, що знову відповідають — тож випадково обрана платна модель не «вбиває» весь пул.'],
+        ['Що таке системний промпт і навіщо він?','Це текст, який автоматично додається перед вашим повідомленням у кожному запиті до цього провайдера — модель бачить його як постійну інструкцію. Зручно, щоб задати мову й стиль відповідей або компенсувати поведінку конкретної моделі. Застосовується до всіх моделей провайдера; порожнє поле означає, що нічого не додається.'],
+        ['Чи можна надсилати моделі зображення?','Так, якщо модель має зір. Оскільки вміють це не всі, зір вмикається окремо для кожної моделі — позначкою 🖼 у редакторі провайдера. Увімкнена позначка означає, що зображення надсилатимуться разом із текстом; вимкнена — ні.'],
+        ['Які моделі показувати у виборі?','Кожна модель у редакторі — перемикач: зелена показується у списку, червона прихована. Приховані не видаляються й повертаються одним кліком. Так зручно ховати платні моделі, щоб не витратити квоту випадково.']
       ]
     },
     en: {
-      navFeatures:'Features', navStart:'Setup', navFaq:'FAQ', navReleases:'Releases',
+      navFeatures:'Features', navStart:'Setup', navFaq:'FAQ', navReleases:'Releases', navDocs:'Docs',
       eyebrow:'Portable coding agent',
       h1a:'Writes, reads and edits code', h1b:'alongside you',
       lead:'Cartel Code is a desktop app with its own API gateway, a rotating key pool, 168 plugins and a fully Ukrainian interface. Node and Electron are already inside: unpack and run.',
@@ -425,7 +438,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       pFeat:'Not a list of buzzwords — what actually separates this build from the bare framework.',
       kStart:'Getting started', hStart:'Three steps from download to work',
       pStart:'Nothing to install — no Node.js, no Python, no Git.',
-      kFaq:'FAQ', hFaq:'The short answers', pFaq:'',
+      kFaq:'FAQ', hFaq:'The short answers', pFaq:'Expand an answer. Every mechanism is covered in detail in the docs.',
       footAbout:'A portable coding agent with a Ukrainian interface.',
       footRepo:'Repository', footRel:'Releases', footChannel:'Channel', footChat:'Chat',
       joinChannel:'Join the channel', joinChat:'Join the chat',
@@ -446,7 +459,11 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
         ['Where are my data and keys stored?','Locally, in the app data folder: profiles, session history, API keys, plugins. Requests go straight to the provider through the local gateway on 127.0.0.1.'],
         ['macOS says the app is from an unidentified developer','The build is not signed with an Apple certificate yet. Right-click → Open. If it still blocks: System Settings → Privacy & Security → Open Anyway.'],
         ['What do I need for access?','Membership in both YT Cartel communities. On first launch a Telegram sign-in page opens; once confirmed, access stays on the device.'],
-        ['How does the app update?','Cartel Code checks GitHub releases itself. The file is downloaded only from github.com, and its size and SHA-256 are verified before it runs.']
+        ['How does the app update?','Cartel Code checks GitHub releases itself. The file is downloaded only from github.com, and its size and SHA-256 are verified before it runs.'],
+        ['Why several keys for one provider?','Keys go in one per line and rotate: every request takes the next live one. If the provider says the quota is spent, that key is parked for a set time and the request moves on immediately. When no live keys remain, the app sends a probe to the parked ones and returns whichever answer again — so a paid model picked by accident never kills the whole pool.'],
+        ['What is the system prompt for?','It is text prepended to every request sent to that provider, which the model reads as a standing instruction. Handy for fixing the language and tone of answers, or compensating for a particular model. It applies to all of the provider\'s models; leave it empty to send nothing.'],
+        ['Can I send images to the model?','Yes, if the model has vision. Since not all do, vision is enabled per model with the 🖼 toggle in the provider editor. On means images are sent along with the text; off means they are not.'],
+        ['Which models show up in the picker?','Each model in the editor is a toggle: green appears in the picker, red is hidden. Hidden ones are not deleted and come back with one click — handy for hiding paid models so you do not burn quota by accident.']
       ]
     }
   }
@@ -568,7 +585,8 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
         return
       }
       // label each size when two architectures exist, so nobody reads the wrong one
-      setText(meta, list.map(function (x) {
+      var ext = kind === 'win' ? '.exe' : '.dmg'
+      setText(meta, ext + ' · ' + list.map(function (x) {
         var arch = /arm64/i.test(x.name) ? 'Apple Silicon ' : (/x64|x86_64/i.test(x.name) && list.length > 1 ? 'Intel ' : '')
         return arch + fmtSize(x.size)
       }).join(' · '))
