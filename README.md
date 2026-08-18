@@ -10,15 +10,15 @@
 
 <br>
 
-[![Завантажити для Windows](https://img.shields.io/badge/Завантажити-Windows%20x64-ff7a3d?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/gitkalenyuk/cartelcode/releases/latest/download/CartelCode-Setup-1.0.0.exe)
-[![macOS](https://img.shields.io/badge/macOS-скоро-3a3a3c?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/gitkalenyuk/cartelcode/releases)
+[![Завантажити для Windows](https://img.shields.io/badge/Завантажити-Windows%20x64-ff7a3d?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/gitkalenyuk/cartelcode/releases/latest)
+[![Завантажити для macOS](https://img.shields.io/badge/Завантажити-macOS-ff7a3d?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/gitkalenyuk/cartelcode/releases/latest)
 
 [![Версія](https://img.shields.io/github/v/release/gitkalenyuk/cartelcode?style=flat-square&color=ff7a3d&label=версія)](https://github.com/gitkalenyuk/cartelcode/releases/latest)
 [![Завантажень](https://img.shields.io/github/downloads/gitkalenyuk/cartelcode/total?style=flat-square&color=ff7a3d&label=завантажень)](https://github.com/gitkalenyuk/cartelcode/releases)
 [![Канал](https://img.shields.io/badge/Telegram-канал-2aabee?style=flat-square&logo=telegram&logoColor=white)](https://t.me/YT_cartell)
 [![Чат](https://img.shields.io/badge/Telegram-чат-2aabee?style=flat-square&logo=telegram&logoColor=white)](https://t.me/+Ovf7rTg8ClBkOGQy)
 
-**[Сайт проєкту →](https://gitkalenyuk.github.io/cartelcode/)**
+**[Сайт проєкту →](https://gitkalenyuk.github.io/cartelcode/)**  ·  **[Довідка →](https://gitkalenyuk.github.io/cartelcode/docs.html)**
 
 </div>
 
@@ -28,8 +28,9 @@
 
 | Система | Файл | Розмір |
 |:--|:--|:--|
-| **Windows 10/11** (x64) | **[CartelCode-Setup-1.0.0.exe](https://github.com/gitkalenyuk/cartelcode/releases/latest/download/CartelCode-Setup-1.0.0.exe)** | 148 МБ |
-| **macOS** (Apple Silicon / Intel) | буде в наступному релізі | — |
+| **Windows 10/11** (x64) | **[CartelCode-Setup-1.0.1.exe](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.1/CartelCode-Setup-1.0.1.exe)** | 146 МБ |
+| **macOS** (Apple Silicon) | **[CartelCode-1.0.1-arm64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.1/CartelCode-1.0.1-arm64.dmg)** | 174 МБ |
+| **macOS** (Intel) | **[CartelCode-1.0.1-x64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.1/CartelCode-1.0.1-x64.dmg)** | 176 МБ |
 
 Усі файли й контрольні суми — на [сторінці релізів](https://github.com/gitkalenyuk/cartelcode/releases).
 
@@ -92,7 +93,7 @@ Node і Electron лежать усередині збірки. Системні 
 <details>
 <summary><b>Windows каже, що видавця не перевірено</b></summary><br>
 Збірка не підписана сертифікатом коду. У вікні SmartScreen: «Докладніше» → «Виконати попри все». Контрольну суму можна звірити самостійно:<br><br>
-<code>Get-FileHash CartelCode-Setup-1.0.0.exe -Algorithm SHA256</code><br><br>
+<code>Get-FileHash CartelCode-Setup-1.0.1.exe -Algorithm SHA256</code><br><br>
 Очікуване значення опубліковане в <a href="https://github.com/gitkalenyuk/cartelcode/releases/latest">релізі</a> у файлі <code>.sha256</code>.
 </details>
 
