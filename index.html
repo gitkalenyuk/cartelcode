@@ -148,6 +148,11 @@ section{padding:76px 0}
 .shield{margin-top:16px;display:flex;gap:11px;align-items:flex-start;padding:15px 17px;border-radius:var(--radius);
   border:1px solid var(--border);background:color-mix(in oklab,var(--card) 60%,transparent);
   font-size:13.5px;color:var(--muted-foreground)}
+.joins{display:flex;flex-wrap:wrap;gap:9px;margin-top:11px}
+.join{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;text-decoration:none;
+  font:600 13px/1 var(--font-sans);border:1px solid color-mix(in oklab,var(--ember) 40%,var(--border));
+  color:var(--ember-soft);background:color-mix(in oklab,var(--ember) 8%,transparent)}
+.join:hover{background:color-mix(in oklab,var(--ember) 16%,transparent)}
 .shield svg{width:17px;height:17px;flex:none;margin-top:2px;fill:var(--ember)}
 
 /* features */
@@ -272,7 +277,12 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       </div>
       <div class="shield">
         <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm0 10.5h7c-.5 4.1-3.1 7.9-7 9V11.5H5V6.3l7-3.1v8.3z"/></svg>
-        <span data-t="shield"></span>
+        <div><span data-t="shield"></span>
+          <div class="joins">
+            <a class="join" href="https://t.me/YT_cartell" target="_blank" rel="noopener" data-t="joinChannel"></a>
+            <a class="join" href="https://t.me/+Ovf7rTg8ClBkOGQy" target="_blank" rel="noopener" data-t="joinChat"></a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -323,7 +333,8 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
     <div class="links">
       <a href="https://github.com/gitkalenyuk/cartelcode" target="_blank" rel="noopener" data-t="footRepo"></a>
       <a href="https://github.com/gitkalenyuk/cartelcode/releases" target="_blank" rel="noopener" data-t="footRel"></a>
-      <a href="https://t.me/+e_g6IwDlVhg4OGJi" target="_blank" rel="noopener" data-t="footTg"></a>
+      <a href="https://t.me/YT_cartell" target="_blank" rel="noopener" data-t="footChannel"></a>
+      <a href="https://t.me/+Ovf7rTg8ClBkOGQy" target="_blank" rel="noopener" data-t="footChat"></a>
     </div>
   </div>
 </footer>
@@ -355,14 +366,15 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       published:'Актуальна версія {v} · опубліковано {d}',
       offline:'Не вдалося перевірити релізи. Відкрити сторінку релізів вручну.',
       noBuild:'збірка ще не опублікована',
-      shield:'Доступ до застосунку — для учасників обох спільнот YT Cartel; вхід підтверджується через Telegram при першому запуску. Усі файли й контрольні суми публікуються в релізах.',
+      shield:'Вхід у застосунок — тільки через Telegram, іншого способу немає. Доступ відкритий учасникам ОБОХ спільнот YT Cartel: приєднайтеся до каналу й чату, а при першому запуску підтвердіть акаунт.',
       kFeat:'Що всередині', hFeat:'П’ять речей, заради яких це збирали',
       pFeat:'Не перелік модних слів, а те, що справді відрізняє цю збірку від голого фреймворку.',
       kStart:'Як запустити', hStart:'Три кроки від завантаження до роботи',
       pStart:'Встановлювати нічого не треба — ні Node.js, ні Python, ні Git.',
       kFaq:'Питання', hFaq:'Коротко про головне', pFaq:'',
       footAbout:'Портативний агент для коду з українським інтерфейсом.',
-      footRepo:'Репозиторій', footRel:'Релізи', footTg:'Спільнота',
+      footRepo:'Репозиторій', footRel:'Релізи', footChannel:'Канал', footChat:'Чат',
+      joinChannel:'Приєднатися до каналу', joinChat:'Приєднатися до чату',
       feats:[
         ['gate','Шлюз API з пулом ключів','Кілька ключів на провайдера, ротація по колу між живими. Вичерпав квоту — ключ заморожується, запит іде на наступний. Нічого не міняти вручну посеред роботи.'],
         ['plug','168 плагінів','Очі для агента й робота із зображеннями, дашборд контексту з підрахунком токенів, машина часу по кроках діалогу. Встановлення однією командою.'],
@@ -399,14 +411,15 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       published:'Latest version {v} · published {d}',
       offline:'Could not check releases. Open the releases page manually.',
       noBuild:'build not published yet',
-      shield:'Access is for members of both YT Cartel communities; sign-in is confirmed through Telegram on first launch. Every file and checksum is published in the releases.',
+      shield:'Sign-in is Telegram-only — there is no other way in. Access is open to members of BOTH YT Cartel communities: join the channel and the chat, then confirm your account on first launch.',
       kFeat:'What is inside', hFeat:'Five things this was built for',
       pFeat:'Not a list of buzzwords — what actually separates this build from the bare framework.',
       kStart:'Getting started', hStart:'Three steps from download to work',
       pStart:'Nothing to install — no Node.js, no Python, no Git.',
       kFaq:'FAQ', hFaq:'The short answers', pFaq:'',
       footAbout:'A portable coding agent with a Ukrainian interface.',
-      footRepo:'Repository', footRel:'Releases', footTg:'Community',
+      footRepo:'Repository', footRel:'Releases', footChannel:'Channel', footChat:'Chat',
+      joinChannel:'Join the channel', joinChat:'Join the chat',
       feats:[
         ['gate','API gateway with a key pool','Several keys per provider, round-robin across the live ones. Hit a quota and the key freezes while the request moves to the next. Nothing to switch by hand mid-task.'],
         ['plug','168 plugins','Vision for the agent and image handling, a context dashboard with token counts, a time machine over conversation steps. One command to install.'],
