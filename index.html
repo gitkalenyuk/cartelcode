@@ -83,7 +83,11 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
   background:color-mix(in oklab,var(--ember) 10%,transparent);
   color:var(--ember-soft);font-size:12.5px;font-weight:600;letter-spacing:.02em}
 .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ember)}
-.hero h1{font-size:clamp(34px,6vw,62px);line-height:1.06;margin:22px 0 0;max-width:16ch}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:48px;align-items:center}
+.hero-copy{min-width:0}
+/* one column below the point where a 2-up hero starts squeezing the headline */
+@media (max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+.hero h1{font-size:clamp(32px,4.6vw,54px);line-height:1.07;margin:22px 0 0;max-width:14ch}
 .hero h1 .em{background:var(--gradient-ember);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .hero .lead{color:var(--muted-foreground);font-size:clamp(15.5px,1.6vw,18px);max-width:62ch;margin-top:20px}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
@@ -97,7 +101,7 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .note{margin-top:18px;font-size:13.5px;color:var(--muted-foreground)}
 
 /* ---------- terminal ---------- */
-.term{margin-top:46px;border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);
+.term{min-width:0;border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);
   background:oklch(13% .008 60);overflow:hidden;box-shadow:0 30px 80px -40px #000}
 .term .bar{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid var(--border);
   background:color-mix(in oklab,var(--card) 70%,transparent)}
@@ -120,6 +124,7 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .stat b{display:block;font-family:var(--font-display);font-size:clamp(24px,3.4vw,34px);color:var(--ember)}
 .stat span{display:block;margin-top:4px;font-size:13px;color:var(--muted-foreground)}
 @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stats{margin-top:44px}
 
 /* ---------- sections ---------- */
 section{padding:76px 0}
@@ -229,22 +234,26 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <span class="eyebrow"><span class="dot"></span><span data-t="eyebrow"></span></span>
-      <h1><span data-t="h1a"></span><br><span class="em" data-t="h1b"></span></h1>
-      <p class="lead" data-t="lead"></p>
-      <div class="cta">
-        <a class="btn btn-primary" id="cta-dl" href="#builds"><span data-t="ctaDownload"></span></a>
-        <a class="btn btn-ghost" href="https://github.com/gitkalenyuk/cartelcode" target="_blank" rel="noopener"><span data-t="ctaGithub"></span></a>
-      </div>
-      <p class="note" id="hero-note"><span class="sk"></span></p>
+      <div class="hero-grid">
+       <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span><span data-t="eyebrow"></span></span>
+        <h1><span data-t="h1a"></span><br><span class="em" data-t="h1b"></span></h1>
+        <p class="lead" data-t="lead"></p>
+        <div class="cta">
+          <a class="btn btn-primary" id="cta-dl" href="#builds"><span data-t="ctaDownload"></span></a>
+          <a class="btn btn-ghost" href="https://github.com/gitkalenyuk/cartelcode" target="_blank" rel="noopener"><span data-t="ctaGithub"></span></a>
+        </div>
+        <p class="note" id="hero-note"><span class="sk"></span></p>
+       </div>
 
-      <div class="term">
+       <div class="term">
         <div class="bar"><i></i><i></i><i></i><span>cartelcode — zsh</span></div>
         <pre><span class="p">$</span> ./cartelcode
 <span class="arrow">→</span> <span data-t="t1"></span>
 <span class="arrow">→</span> <span data-t="t2"></span>
 <span class="arrow">→</span> <span data-t="t3"></span>
 <span class="ok">✔</span> <span data-t="t4"></span> <span class="cur"></span></pre>
+       </div>
       </div>
 
       <div class="stats">
