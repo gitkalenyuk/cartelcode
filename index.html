@@ -204,7 +204,109 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 .sk{display:inline-block;min-width:70px;height:.85em;border-radius:5px;background:var(--muted);
   animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite;vertical-align:-1px}
 @keyframes pulse{50%{opacity:.45}}
+
+/* ---------- motion ----------------------------------------------------------
+   The page's identity is a terminal booting, so the motion is a boot sequence:
+   the hero types itself out, sections rise as you reach them, numbers count up.
+   Everything below has an explicit resting state, because the reduced-motion
+   rule at the top of this file kills every animation and transition outright —
+   an element left at opacity:0 waiting for an animation would simply never
+   appear for those visitors. Hence the .rv override in that media query. */
+
+.js .rv{opacity:0;transform:translateY(18px);
+  transition:opacity .62s cubic-bezier(.2,.7,.3,1),transform .62s cubic-bezier(.2,.7,.3,1);
+  transition-delay:calc(var(--i,0) * 70ms)}
+.js .rv.in{opacity:1;transform:none}
+
+/* Hero pieces animate on load rather than on scroll: they are already in view. */
+.js .boot{opacity:0;transform:translateY(14px);animation:bootIn .7s cubic-bezier(.2,.7,.3,1) forwards;
+  animation-delay:calc(var(--b,0) * 90ms)}
+@keyframes bootIn{to{opacity:1;transform:none}}
+.js .term.boot{transform:translateY(22px) scale(.985);animation-name:bootTerm}
+@keyframes bootTerm{to{opacity:1;transform:none}}
+
+/* The ember behind the headline breathes very slowly — ambient, not decorative. */
+.hero::before{animation:drift 19s ease-in-out infinite alternate}
+@keyframes drift{
+  from{transform:translate3d(-2%,0,0) scale(1);opacity:.9}
+  to{transform:translate3d(2%,-3%,0) scale(1.08);opacity:1}
+}
+
+/* Terminal typing: each line is revealed character by character by the script,
+   and the caret sits at the end of whichever line is currently being written. */
+.js .term .ln{visibility:hidden}
+.term .ln.on{visibility:visible}
+.js .term .cur{opacity:0;transition:opacity .2s}
+.term .cur.on{opacity:1}
+
+/* Header gains weight once the hero has scrolled past. */
+header{transition:box-shadow .25s,border-color .25s,background .25s}
+header.stuck{box-shadow:0 12px 40px -28px #000;
+  border-bottom-color:color-mix(in oklab,var(--ember) 22%,var(--border))}
+
+/* Cards lift and catch a little ember light on hover. */
+.feat,.power,.new-card{transition:transform .22s cubic-bezier(.2,.7,.3,1),border-color .22s,box-shadow .22s}
+.feat:hover,.power:hover,.new-card:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in oklab,var(--ember) 45%,var(--border));
+  box-shadow:0 22px 50px -34px color-mix(in oklab,var(--ember) 70%,#000)}
+
+.btn{transition:transform .18s cubic-bezier(.2,.7,.3,1),filter .18s,background .18s,border-color .18s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+
+.stat b{font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion:reduce){
+  .js .rv,.js .boot{opacity:1 !important;transform:none !important}
+  .js .term .ln{visibility:visible !important}
+  .js .term .cur{opacity:1 !important}
+}
+
+/* ---------- what's new ---------- */
+.new-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.new-grid{grid-template-columns:1fr}}
+.new-card{position:relative;border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);
+  background:linear-gradient(180deg,color-mix(in oklab,var(--ember) 5%,var(--card)),var(--card));
+  padding:26px 24px 24px}
+.new-card .ic{width:40px;height:40px;border-radius:11px;
+  background:color-mix(in oklab,var(--ember) 16%,transparent);display:grid;place-items:center;margin-bottom:16px}
+.new-card .ic svg{width:20px;height:20px;stroke:var(--ember);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.new-card h3{font-size:17.5px;margin-bottom:9px}
+.new-card p{color:var(--muted-foreground);font-size:14.5px}
+.verbadge{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;
+  border:1px solid color-mix(in oklab,var(--ember) 34%,transparent);
+  background:color-mix(in oklab,var(--ember) 12%,transparent);
+  color:var(--ember-soft);font:600 12.5px/1 var(--font-mono);letter-spacing:.02em;margin-left:12px;
+  vertical-align:2px}
+.verbadge .pip{width:6px;height:6px;border-radius:50%;background:var(--ember);
+  box-shadow:0 0 0 0 color-mix(in oklab,var(--ember) 70%,transparent);animation:pip 2.4s ease-out infinite}
+@keyframes pip{
+  0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--ember) 70%,transparent)}
+  70%{box-shadow:0 0 0 9px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+.newlink{margin-top:22px;font-size:14px;color:var(--muted-foreground)}
+.newlink a{color:var(--ember-soft);text-decoration:none;border-bottom:1px solid color-mix(in oklab,var(--ember) 40%,transparent)}
+.newlink a:hover{color:var(--ember)}
+
+/* ---------- powers ---------- */
+.powers{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:calc(var(--radius) + 4px);overflow:hidden}
+@media (max-width:760px){.powers{grid-template-columns:1fr}}
+.power{background:var(--card);padding:26px 24px;transition:background .22s}
+.power:hover{background:color-mix(in oklab,var(--ember) 6%,var(--card));transform:none;box-shadow:none}
+.power .n{font:700 12px/1 var(--font-mono);color:color-mix(in oklab,var(--ember) 75%,transparent);
+  letter-spacing:.14em}
+.power h3{font-size:17px;margin:13px 0 9px}
+.power p{color:var(--muted-foreground);font-size:14.5px}
+
+.nojs{max-width:640px;margin:64px auto;padding:0 24px;text-align:center}
+.nojs h1{font-size:26px;margin-bottom:14px}
+.nojs p{color:var(--muted-foreground);margin-bottom:18px}
+.nojs a{color:var(--ember)}
 </style>
+<script>document.documentElement.className+=' js'</script>
 </head>
 <body>
 
@@ -215,6 +317,8 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       <span><span class="t1">cartel</span><span class="t2">code</span></span>
     </a>
     <nav>
+      <a href="#whatsnew" data-t="navNew"></a>
+      <a href="#powers" data-t="navPowers"></a>
       <a href="#features" data-t="navFeatures"></a>
       <a href="#start" data-t="navStart"></a>
       <a href="#faq" data-t="navFaq"></a>
@@ -234,34 +338,45 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
   </div>
 </header>
 
+<noscript>
+  <div class="nojs">
+    <h1>Потрібен JavaScript</h1>
+    <p>Ця сторінка збирає перелік збірок із GitHub, тож без JavaScript їй нема що показати.
+      Завантажити Cartel Code можна напряму зі сторінки релізів.</p>
+    <p><a href="https://github.com/gitkalenyuk/cartelcode/releases/latest">Сторінка релізів →</a></p>
+    <p><a href="./docs.html">Довідка</a> · <a href="https://t.me/YT_cartell">Канал</a> ·
+       <a href="https://t.me/+Ovf7rTg8ClBkOGQy">Чат</a></p>
+  </div>
+</noscript>
+
 <main id="top">
   <section class="hero">
     <div class="wrap">
       <div class="hero-grid">
        <div class="hero-copy">
-        <span class="eyebrow"><span class="dot"></span><span data-t="eyebrow"></span></span>
-        <h1><span data-t="h1a"></span><br><span class="em" data-t="h1b"></span></h1>
-        <p class="lead" data-t="lead"></p>
-        <div class="cta">
+        <span class="eyebrow boot" style="--b:0"><span class="dot"></span><span data-t="eyebrow"></span></span>
+        <h1 class="boot" style="--b:1"><span data-t="h1a"></span><br><span class="em" data-t="h1b"></span></h1>
+        <p class="lead boot" style="--b:2" data-t="lead"></p>
+        <div class="cta boot" style="--b:3">
           <a class="btn btn-primary" id="cta-dl" href="#builds"><span data-t="ctaDownload"></span></a>
           <a class="btn btn-ghost" href="https://github.com/gitkalenyuk/cartelcode" target="_blank" rel="noopener"><span data-t="ctaGithub"></span></a>
         </div>
-        <p class="note" id="hero-note"><span class="sk"></span></p>
+        <p class="note boot" style="--b:4" id="hero-note"><span class="sk"></span></p>
        </div>
 
-       <div class="term">
+       <div class="term boot" style="--b:2">
         <div class="bar"><i></i><i></i><i></i><span>cartelcode — zsh</span></div>
-        <pre><span class="p">$</span> ./cartelcode
-<span class="arrow">→</span> <span data-t="t1"></span>
-<span class="arrow">→</span> <span data-t="t2"></span>
-<span class="arrow">→</span> <span data-t="t3"></span>
-<span class="ok">✔</span> <span data-t="t4"></span> <span class="cur"></span></pre>
+        <pre><span class="ln on"><span class="p">$</span> ./cartelcode</span>
+<span class="ln"><span class="arrow">→</span> <span data-t="t1" data-type></span></span>
+<span class="ln"><span class="arrow">→</span> <span data-t="t2" data-type></span></span>
+<span class="ln"><span class="arrow">→</span> <span data-t="t3" data-type></span></span>
+<span class="ln"><span class="ok">✔</span> <span data-t="t4" data-type></span> <span class="cur"></span></span></pre>
        </div>
       </div>
 
-      <div class="stats">
-        <div class="stat"><b>168</b><span data-t="s1"></span></div>
-        <div class="stat"><b>100%</b><span data-t="s2"></span></div>
+      <div class="stats rv">
+        <div class="stat"><b data-count="168">168</b><span data-t="s1"></span></div>
+        <div class="stat"><b data-count="100" data-suffix="%">100%</b><span data-t="s2"></span></div>
         <div class="stat"><b>0</b><span data-t="s3"></span></div>
         <div class="stat"><b>∞</b><span data-t="s4"></span></div>
       </div>
@@ -270,12 +385,12 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 
   <section id="builds">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head rv">
         <div class="sec-kicker" data-t="kBuilds"></div>
         <h2 data-t="hBuilds"></h2>
         <p data-t="pBuilds"></p>
       </div>
-      <div class="builds">
+      <div class="builds rv">
         <div class="build" id="row-win">
           <div class="os"><svg viewBox="0 0 24 24"><path d="M3 5.5 10 4.6v6.9H3zm0 13L10 19.4v-6.8H3zM11 4.4 21 3v8.5H11zm0 15.2L21 21v-8.4H11z"/></svg></div>
           <div class="meta">
@@ -293,7 +408,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
           <div class="dlwrap" id="dl-mac"><span class="dl dl-off" data-t="soon"></span></div>
         </div>
       </div>
-      <div class="shield">
+      <div class="shield rv">
         <svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm0 10.5h7c-.5 4.1-3.1 7.9-7 9V11.5H5V6.3l7-3.1v8.3z"/></svg>
         <div><span data-t="shield"></span>
           <div class="joins">
@@ -305,9 +420,33 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
     </div>
   </section>
 
+  <section id="whatsnew">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-kicker" data-t="kNew"></div>
+        <h2><span data-t="hNew"></span><span class="verbadge"><span class="pip"></span><span id="new-ver">1.1.0</span></span></h2>
+        <p data-t="pNew"></p>
+      </div>
+      <div class="new-grid" id="new-grid"></div>
+      <p class="newlink rv"><span data-t="newMore"></span>
+        <a href="./docs.html#skills" data-t="newDocs"></a></p>
+    </div>
+  </section>
+
+  <section id="powers">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-kicker" data-t="kPower"></div>
+        <h2 data-t="hPower"></h2>
+        <p data-t="pPower"></p>
+      </div>
+      <div class="powers" id="powers-grid"></div>
+    </div>
+  </section>
+
   <section id="features">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head rv">
         <div class="sec-kicker" data-t="kFeat"></div>
         <h2 data-t="hFeat"></h2>
         <p data-t="pFeat"></p>
@@ -318,7 +457,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 
   <section id="start">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head rv">
         <div class="sec-kicker" data-t="kStart"></div>
         <h2 data-t="hStart"></h2>
         <p data-t="pStart"></p>
@@ -329,7 +468,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
 
   <section id="faq">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head rv">
         <div class="sec-kicker" data-t="kFaq"></div>
         <h2 data-t="hFaq"></h2>
         <p data-t="pFaq"></p>
@@ -370,6 +509,28 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
   var T = {
     uk: {
       navFeatures:'Можливості', navStart:'Запуск', navFaq:'Питання', navReleases:'Релізи', navDocs:'Довідка',
+      navNew:'Нове', navPowers:'Фішки',
+      newMore:'Кожну з трьох можливостей детально розібрано в довідці —',
+      newDocs:'читати розділ про скіли',
+      kNew:'Що нового',
+      hNew:'Три способи розширити застосунок',
+      pNew:'Скіли, MCP-сервери й власні плагіни — у кожного своя сторінка в налаштуваннях, і кожен можна доручити написати самому агентові.',
+      whatsnew:[
+        ['skill','Скіли','Скіл — це тека з файлом SKILL.md: імʼя, опис і текст інструкції. Модель обирає скіл винятково за описом, тому нова навичка — це кілька абзаців, а не код. Встановлюйте з теки, з посилання на GitHub або вставленим текстом; формат той самий, що в Claude Code, і працює скіл одразу, без перезапуску.'],
+        ['mcp','MCP-сервери','MCP — спільний протокол, яким зовнішня програма показує моделі свої можливості. Підключіть локальну програму через stdio або віддалений сервер за URL: після перезапуску його інструменти зʼявляться в моделі як mcp__<імʼя>__<інструмент>. Кнопка «Перевірити підключення» ще до того справді запускає сервер в окремому процесі й показує реальний перелік інструментів, які отримає модель.'],
+        ['plug2','Власні плагіни','Плагін тут — не надбудова, а те, з чого зроблений сам застосунок: інструменти, памʼять і режими роботи є окремими рядками в дереві плагінів. Кнопка «Створити заготовку» дає робочий пакет із прикладом інструмента, а встановлення робить посилання на вашу теку, а не копію, тож змінений код підхоплюється звичайним перезапуском. Плагін, який не зміг активуватися, зупиняє запуск усього застосунку — тому Cartel Code сам розпізнає винуватця, називає його й пропонує вимкнути, не чіпаючи вашу теку з кодом.']
+      ],
+      kPower:'Фішки',
+      hPower:'Те, чого від портативної збірки не чекаєш',
+      pPower:'Шість речей, які рідко потрапляють у список можливостей, бо помітні лише в роботі.',
+      powers:[
+        ['Пул ключів, який сам себе лікує','Заморожений ключ не викидається назавжди: коли живих не лишилось, шлюз надсилає перевірочний запит на відкладені й повертає в ротацію ті, що знову відповідають. Найчастіша причина «мертвого» ключа — не ключ, а обрана платна модель, і саме це перевірка й відрізняє.'],
+        ['Скіл, який агент пише собі сам','На сторінці скілів є кнопка, що вставляє в чат готову інструкцію — з форматом SKILL.md і справжнім шляхом до теки скілів. Допишіть у кінці, що саме має вміти скіл, і надішліть: агент складе файл, покладе куди треба, і скіл почне діяти без перезапуску.'],
+        ['Відмотати розмову разом із файлами','Машина часу йде по кроках діалогу й повертає не лише текст, а й стан файлів на той момент. Гілку, що пішла не туди, не треба розплутувати вручну — досить відкотитися на крок назад і сказати інакше.'],
+        ['Плагін, який агент пише собі сам','Кнопка на сторінці власних плагінів кладе в чат інструкцію зі справжніми шляхами цієї збірки, потрібним форматом пакета й переліком помилок, на яких агент найчастіше спотикається. Опишіть, що має робити плагін, — і після перезапуску новий інструмент зʼявиться в моделі поруч із вбудованими.'],
+        ['Видно, скільки контексту лишилось','Дашборд контексту рахує токени й показує, чим саме зайняте вікно моделі просто зараз. Коли модель починає губити деталі, не треба гадати чому — видно, що місце добігає кінця.'],
+        ['Список моделей під себе','Зір вмикається окремо для кожної моделі позначкою 🖼: приймають зображення не всі, і надіслати їх наосліп означає зламаний запит. Там само зайві моделі ховаються зі списку одним кліком — так платна модель не потрапить під руку випадково.']
+      ],
       eyebrow:'Портативний агент для коду',
       h1a:'Пише, читає й править код', h1b:'разом з вами',
       lead:'Cartel Code — десктопний застосунок з власним шлюзом API, пулом ключів, 168 плагінами і повністю українською оболонкою. Node і Electron уже всередині: розпакували — працює.',
@@ -414,11 +575,38 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
         ['Навіщо кілька ключів на одного провайдера?','Ключі вставляються по одному в рядок і працюють по колу: кожен новий запит іде на наступний живий. Якщо провайдер відповів, що квота вичерпана, ключ відкладається на заданий час, а запит одразу йде далі. Коли живих не лишилось, застосунок надсилає перевірочний запит на відкладені й повертає в роботу ті, що знову відповідають — тож випадково обрана платна модель не «вбиває» весь пул.'],
         ['Що таке системний промпт і навіщо він?','Це текст, який автоматично додається перед вашим повідомленням у кожному запиті до цього провайдера — модель бачить його як постійну інструкцію. Зручно, щоб задати мову й стиль відповідей або компенсувати поведінку конкретної моделі. Застосовується до всіх моделей провайдера; порожнє поле означає, що нічого не додається.'],
         ['Чи можна надсилати моделі зображення?','Так, якщо модель має зір. Оскільки вміють це не всі, зір вмикається окремо для кожної моделі — позначкою 🖼 у редакторі провайдера. Увімкнена позначка означає, що зображення надсилатимуться разом із текстом; вимкнена — ні.'],
-        ['Які моделі показувати у виборі?','Кожна модель у редакторі — перемикач: зелена показується у списку, червона прихована. Приховані не видаляються й повертаються одним кліком. Так зручно ховати платні моделі, щоб не витратити квоту випадково.']
+        ['Які моделі показувати у виборі?','Кожна модель у редакторі — перемикач: зелена показується у списку, червона прихована. Приховані не видаляються й повертаються одним кліком. Так зручно ховати платні моделі, щоб не витратити квоту випадково.'],
+        ['Що таке скіл і чим він відрізняється від системного промпта?','Скіл — це тека з файлом SKILL.md: угорі YAML-frontmatter з полями name (малі латинські літери, цифри й дефіс) та description, далі сам текст інструкції. Різниця з системним промптом у тому, коли цей текст доходить до моделі. Системний промпт додається перед кожним вашим повідомленням до цього провайдера й витрачає токени завжди, навіть коли до поточної задачі він не має стосунку. Зі скілів модель постійно бачить лише імена й описи, а повний текст відкриває сама — коли задача збігається з описом. Через це description і є найважливішим рядком скіла: у ньому має бути і що скіл робить, і коли його брати, інакше він просто ніколи не спрацює. Ставляться скіли з теки, з посилання на GitHub або вставленим текстом, і діють одразу: перезапуск не потрібен, тека скілів перечитується на льоту.'],
+        ['Чи працюють тут скіли з Claude Code?','Так, без переробки — формат на диску той самий: тека <імʼя>/SKILL.md, а в frontmatter обовʼязкові лише name і description. Ключі, яких застосунок не знає, наприклад allowed-tools з Claude Code, ігноруються, а не викликають помилку. Найшвидший шлях: вставити посилання на теку скіла або прямо на SKILL.md у поле «Посилання на GitHub» і натиснути «Завантажити й встановити». Приймаються тільки github.com і raw.githubusercontent.com — цей текст стає інструкцією для моделі, тож джерело має бути передбачуваним. Файл перевіряється до того, як щось запишеться на диск, тому скіл із поламаним frontmatter не лишиться встановленим наполовину: ви одразу побачите, чого саме в ньому бракує.'],
+        ['Що таке MCP і навіщо воно мені?','MCP (Model Context Protocol) — спільний протокол, яким зовнішня програма показує моделі свої можливості. Підключений сервер зʼявляється в переліку інструментів як mcp__<імʼя-сервера>__<інструмент> і працює нарівні з вбудованими. Так додають те, чого в застосунку немає: доступ до конкретної робочої теки, довгу памʼять між сесіями, покрокове мислення — ці три сервери вже є в каталозі й підставляються у форму одним кліком. Типів підключення два: stdio — сервер запускається як звичайна програма на цьому ж компʼютері й спілкується через свій ввід і вивід; streamable-http — сервер уже десь працює, і ви даєте його URL та заголовки. Кнопка «Перевірити підключення» справді піднімає сервер в окремому процесі й показує реальний перелік інструментів, які отримає модель. Сервер має рівно ті права, які ви йому дали, тож серверу файлів вказуйте конкретну робочу теку, а не диск цілком. Самі сервери підхоплюються після перезапуску.'],
+        ['Чи можу я зробити власний плагін, якщо не вмію програмувати?','Так, бо писати його не обовʼязково самому. На сторінці «Мої плагіни» є кнопка «Вставити інструкцію в чат»: вона кладе у поле вводу готове завдання — потрібний склад файлів, формат package.json з обовʼязковим полем dsh.bundle.patch (без нього застосунок вважатиме пакет звичайною залежністю, і плагін не завантажиться), формат cordis.patch.yml і перелік помилок, на яких агент тут найчастіше спотикається. Вам лишається дописати в кінці одне речення про те, що плагін має робити, і надіслати — далі агент пише код і встановлює його сам. Якщо хочеться спершу подивитися на приклад, кнопка «Створити заготовку» робить робочий пакет з одним інструментом і поясненнями в коментарях. Встановлення робить посилання на вашу теку, а не копію, тож будь-яка правка в коді підхоплюється звичайним перезапуском — встановлювати заново не треба. Сам плагін починає працювати після перезапуску.'],
+        ['Що буде, якщо мій плагін зламається?','Плагін, який не зміг активуватися, зупиняє запуск усього застосунку: це не мʼяка помилка — програма відмовляється стартувати взагалі, і вікно просто не відкривається. Найчастіша причина — неіснуюче імʼя сервісу в inject: попередження про це немає, плагін мовчки ніколи не активується. Cartel Code розпізнає такий збій у журналі запуску, називає винний плагін і пропонує його вимкнути. Вимкнення редагує маніфест профілю напряму, тож працює навіть тоді, коли встановлення пакетів саме по собі зламане. Теку з вашим кодом при цьому не чіпають: виправили помилку, встановили ще раз — і плагін повернувся на місце.']
       ]
     },
     en: {
       navFeatures:'Features', navStart:'Setup', navFaq:'FAQ', navReleases:'Releases', navDocs:'Docs',
+      navNew:'New', navPowers:'Highlights',
+      newMore:'Each of the three is covered in detail in the docs —',
+      newDocs:'read the skills section',
+      kNew:'What\'s new',
+      hNew:'Three ways to extend the app',
+      pNew:'Skills, MCP servers and plugins of your own — each gets its own settings page, and each can be handed to the agent to write.',
+      whatsnew:[
+        ['skill','Skills','A skill is a folder with a SKILL.md file: a name, a description and the instruction text. The model picks a skill purely from that description, so a new capability is a few paragraphs rather than code. Install one from a folder, from a GitHub link or by pasting the text; the format is identical to Claude Code, and a skill works immediately, with no restart.'],
+        ['mcp','MCP servers','MCP is a shared protocol through which an outside program exposes its capabilities to a model. Connect a local program over stdio or a remote server by URL, and after a restart its tools appear to the model as mcp__<name>__<tool>. Before that, Test connection really does launch the server in a separate process and shows the actual list of tools the model will get.'],
+        ['plug2','Plugins of your own','A plugin here is not an add-on — it is what the app itself is made of: tools, memory and working modes are all rows in one plugin tree. Create starter gives you a working package with a sample tool, and installing links your folder instead of copying it, so edited code is picked up by a plain restart. A plugin that fails to activate halts the whole boot, so Cartel Code names the culprit itself and offers to switch it off, leaving your code folder untouched.']
+      ],
+      kPower:'Highlights',
+      hPower:'What you would not expect from a portable build',
+      pPower:'Six things that rarely make a feature list, because they only show up once you are working.',
+      powers:[
+        ['A key pool that heals itself','A frozen key is never thrown away: when no live keys are left, the gateway probes the parked ones and puts back into rotation whichever ones answer normally again. The usual reason a key looks dead is the model you picked, not the key — and the probe is exactly what tells the two apart.'],
+        ['A skill the agent writes for itself','The skills page has a button that drops a ready instruction into the chat, carrying the SKILL.md format and the real path to the skills folder. Add what the skill should do, send it, and the agent writes the file and puts it where it belongs — live straight away, no restart.'],
+        ['Rewind the conversation along with the files','The time machine walks back through the conversation and restores not only the text but the state of your files at that point. A branch that went wrong needs no untangling — step back and say it differently.'],
+        ['A plugin the agent writes for itself','A button on the custom plugins page puts an instruction into the chat with the real paths of this build, the required package layout and the mistakes agents most often make here. Describe what the plugin should do, and after a restart the new tool sits in the model next to the built-in ones.'],
+        ['You can see how much context is left','The context dashboard counts tokens and shows what is filling the model window right now. When the model starts dropping details there is nothing to guess about — you can watch the room run out.'],
+        ['A model list shaped to your work','Vision is switched on per model with the 🖼 toggle: not every model takes images, and sending them blind just breaks the request. The same editor hides models you never use in one click, so a paid one never lands under your finger by accident.']
+      ],
       eyebrow:'Portable coding agent',
       h1a:'Writes, reads and edits code', h1b:'alongside you',
       lead:'Cartel Code is a desktop app with its own API gateway, a rotating key pool, 168 plugins and a fully Ukrainian interface. Node and Electron are already inside: unpack and run.',
@@ -463,7 +651,12 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
         ['Why several keys for one provider?','Keys go in one per line and rotate: every request takes the next live one. If the provider says the quota is spent, that key is parked for a set time and the request moves on immediately. When no live keys remain, the app sends a probe to the parked ones and returns whichever answer again — so a paid model picked by accident never kills the whole pool.'],
         ['What is the system prompt for?','It is text prepended to every request sent to that provider, which the model reads as a standing instruction. Handy for fixing the language and tone of answers, or compensating for a particular model. It applies to all of the provider\'s models; leave it empty to send nothing.'],
         ['Can I send images to the model?','Yes, if the model has vision. Since not all do, vision is enabled per model with the 🖼 toggle in the provider editor. On means images are sent along with the text; off means they are not.'],
-        ['Which models show up in the picker?','Each model in the editor is a toggle: green appears in the picker, red is hidden. Hidden ones are not deleted and come back with one click — handy for hiding paid models so you do not burn quota by accident.']
+        ['Which models show up in the picker?','Each model in the editor is a toggle: green appears in the picker, red is hidden. Hidden ones are not deleted and come back with one click — handy for hiding paid models so you do not burn quota by accident.'],
+        ['What is a skill, and how is it different from the system prompt?','A skill is a folder with a SKILL.md file: YAML frontmatter at the top with name (lowercase letters, digits and hyphens) and description, then the instruction text itself. The difference from the system prompt is when that text reaches the model. The system prompt is prepended to every message you send to that provider and costs tokens every time, even when it has nothing to do with the task at hand. Of your skills the model only ever sees the names and descriptions, and it opens the full text itself when a task matches one. That is what makes description the most important line in a skill: it has to say both what the skill does and when to reach for it, or the skill never fires. Skills install from a folder, from a GitHub link or from pasted text, and they apply immediately: no restart, the skills folder is watched live.'],
+        ['Do Claude Code skills work here?','Yes, unchanged — the on-disk format is the same: a <name>/SKILL.md folder, with only name and description required in the frontmatter. Keys the app does not know, allowed-tools from Claude Code for example, are ignored rather than rejected. The quickest path: paste a link to the skill folder, or straight to SKILL.md, into the "GitHub link" field and press "Download and install". Only github.com and raw.githubusercontent.com are accepted — this text becomes instructions for the model, so the source has to be predictable. The file is checked before anything is written to disk, so a skill with broken frontmatter never ends up half-installed: you are told immediately what it is missing.'],
+        ['What is MCP and why would I want it?','MCP (Model Context Protocol) is a shared protocol through which an external program exposes its capabilities to a model. A connected server appears in the tool catalog as mcp__<server-name>__<tool> and works alongside the built-in tools. That is how you add what the app does not ship: access to one specific working folder, long-term memory across sessions, structured step-by-step reasoning — these three servers are already in the catalog and fill the form with one click. There are two kinds of connection: stdio, where the server runs as an ordinary program on this machine and talks over its own input and output; and streamable-http, where the server already runs somewhere and you supply its URL and headers. "Test connection" really does start the server in a separate process and shows the actual tool list the model will get. A server has exactly the reach you hand it, so point a filesystem server at one working folder rather than a whole drive. The servers themselves come up after a restart.'],
+        ['Can I make my own plugin if I cannot program?','Yes, because you do not have to write it yourself. The "My plugins" page has an "Insert instruction into chat" button: it drops a complete task into the input box — the required set of files, the package.json layout with the mandatory dsh.bundle.patch field (without it the app treats the package as an ordinary dependency and the plugin never loads), the cordis.patch.yml format, and the list of mistakes agents most often make here. All that is left for you is to add one sentence at the end about what the plugin should do and send it; the agent writes the code and installs it. If you would rather see an example first, "Create starter" produces a working package with one tool and explanations in the comments. Installing links your folder rather than copying it, so any edit to the code is picked up by a plain restart — no reinstall needed. The plugin itself starts working after that restart.'],
+        ['What happens if my plugin breaks?','A plugin that fails to activate halts the whole startup: this is not a soft error — the program refuses to boot at all and the window simply does not open. The usual cause is a service name in inject that does not exist: there is no warning for it, the plugin silently never activates. Cartel Code recognises that failure in the startup log, names the guilty plugin and offers to switch it off. Switching off edits the profile manifest directly, so it works even when package installation itself is broken. Your code folder is left untouched: fix the mistake, install once more, and the plugin is back in place.']
       ]
     }
   }
@@ -473,16 +666,22 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
     plug:'<path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 0 1-12 0z"/><path d="M12 18v3"/>',
     lang:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/>',
     tg:'<path d="M21 4 3 11l5 2 2 6 3-4 5 4z"/>',
-    box:'<path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>'
+    box:'<path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
+    skill:'<path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1.1 5.6L12 15.8 6.9 18.4 8 12.8 4 8.9l5.6-.7z"/>',
+    mcp:'<path d="M4 7h16M4 12h16M4 17h16"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>',
+    plug2:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8"/>'
   }
 
   var lang = 'uk'
   var $ = function (s, r) { return (r || document).querySelector(s) }
   function setText(el, v) { if (el) el.textContent = v }
+  // The unit and the decimal mark are language, not formatting: an English page
+  // reading "146 МБ" is the kind of detail that makes a translation feel unfinished.
   function fmtSize(b) {
     if (!b) return ''
     var mb = b / 1048576
-    return (mb >= 100 ? Math.round(mb) : mb.toFixed(1)).toString().replace('.', ',') + ' МБ'
+    var n = (mb >= 100 ? Math.round(mb) : mb.toFixed(1)).toString()
+    return lang === 'uk' ? n.replace('.', ',') + ' МБ' : n + ' MB'
   }
 
   function render() {
@@ -495,26 +694,48 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
     // features
     var fw = $('#feats'); fw.innerHTML = ''
     t.feats.forEach(function (f) {
-      var d = document.createElement('div'); d.className = 'feat'
+      var d = document.createElement('div'); d.className = 'feat rv'
       var ic = document.createElement('div'); ic.className = 'ic'
       ic.innerHTML = '<svg viewBox="0 0 24 24">' + (ICONS[f[0]] || '') + '</svg>'
       var h = document.createElement('h3'); h.textContent = f[1]
       var p = document.createElement('p'); p.textContent = f[2]
       d.appendChild(ic); d.appendChild(h); d.appendChild(p); fw.appendChild(d)
     })
+    Array.prototype.forEach.call(fw.children, function (c, i) { c.style.setProperty('--i', i % 3) })
     // steps
     var sw = $('#steps'); sw.innerHTML = ''
     t.steps.forEach(function (s, i) {
-      var d = document.createElement('div'); d.className = 'step'
+      var d = document.createElement('div'); d.className = 'step rv'
       var n = document.createElement('div'); n.className = 'n'; n.textContent = '0' + (i + 1)
       var h = document.createElement('h3'); h.textContent = s[0]
       var p = document.createElement('p'); p.textContent = s[1]
       d.appendChild(n); d.appendChild(h); d.appendChild(p); sw.appendChild(d)
+      d.style.setProperty('--i', i)
+    })
+    // what's new
+    var nw = $('#new-grid'); nw.innerHTML = ''
+    ;(t.whatsnew || []).forEach(function (f, i) {
+      var d = document.createElement('div'); d.className = 'new-card rv'; d.style.setProperty('--i', i)
+      var ic = document.createElement('div'); ic.className = 'ic'
+      ic.innerHTML = '<svg viewBox="0 0 24 24">' + (ICONS[f[0]] || '') + '</svg>'
+      var h = document.createElement('h3'); h.textContent = f[1]
+      var p = document.createElement('p'); p.textContent = f[2]
+      d.appendChild(ic); d.appendChild(h); d.appendChild(p); nw.appendChild(d)
+    })
+    // powers
+    var pw = $('#powers-grid'); pw.innerHTML = ''
+    ;(t.powers || []).forEach(function (f, i) {
+      var d = document.createElement('div'); d.className = 'power'
+      var n = document.createElement('div'); n.className = 'n'
+      n.textContent = String(i + 1).padStart(2, '0')
+      var h = document.createElement('h3'); h.textContent = f[0]
+      var p = document.createElement('p'); p.textContent = f[1]
+      d.appendChild(n); d.appendChild(h); d.appendChild(p); pw.appendChild(d)
     })
     // faq
     var qw = $('#faq-list'); qw.innerHTML = ''
-    t.faq.forEach(function (q) {
-      var d = document.createElement('details')
+    t.faq.forEach(function (q, i) {
+      var d = document.createElement('details'); d.className = 'rv'; d.style.setProperty('--i', Math.min(i, 6))
       var s = document.createElement('summary'); s.textContent = q[0]
       var p = document.createElement('p'); p.textContent = q[1]
       d.appendChild(s); d.appendChild(p); qw.appendChild(d)
@@ -523,6 +744,175 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang))
     })
     paintReleases()
+    arm()
+    typeTerminal()
+  }
+
+  // ---- motion ---------------------------------------------------------------
+  // One honest switch for the whole layer. Visitors who asked their system for
+  // less motion get the finished page immediately: every element is placed in
+  // its resting state and no timer is ever started.
+  var CALM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  var io = null, watchdog = false
+
+  // Reveal everything that is currently on screen. This is both the observer-
+  // independent backstop below and what a re-render calls to restore already-read
+  // content, so it stays cheap: the list it walks only ever shrinks.
+  function revealVisible() {
+    var n = 0
+    Array.prototype.forEach.call(document.querySelectorAll('.rv:not(.in)'), function (el) {
+      var r = el.getBoundingClientRect()
+      if (r.top < window.innerHeight * 0.94 && r.bottom > 0) { el.classList.add('in'); countUp(el); n++ }
+    })
+    return n
+  }
+
+  // Backstop. An earlier version of this tried to DECIDE whether the observer was
+  // working — first by asking whether its callback had run (it always has: an
+  // observer invokes the callback for every target the moment you observe it),
+  // then by asking whether anything in the first viewport was still hidden (on a
+  // short window there may be nothing there to judge by). Both were guesses about
+  // a thing we can simply check directly.
+  //
+  // So there is no decision any more. A throttled scroll pass reveals anything on
+  // screen that the observer has not already handled, plus one pass shortly after
+  // the tab becomes visible. When the observer works this finds nothing and walks
+  // a list that only ever shrinks; when it does not, the page still reads
+  // normally. The observer stays because it gives the nicer threshold behaviour,
+  // not because the page depends on it.
+  function watch() {
+    if (watchdog || CALM) return
+    watchdog = true
+    var t = null
+    window.addEventListener('scroll', function () {
+      if (t) return
+      t = setTimeout(function () { t = null; revealVisible() }, 120)
+    }, { passive: true })
+    window.addEventListener('resize', revealVisible, { passive: true })
+    var start = function () { setTimeout(revealVisible, 2200) }
+    if (document.hidden) {
+      document.addEventListener('visibilitychange', function once() {
+        if (document.hidden) return
+        document.removeEventListener('visibilitychange', once)
+        start()
+      })
+    } else start()
+  }
+
+  var firstArm = true
+  function arm() {
+    var items = document.querySelectorAll('.rv:not(.in)')
+    if (!firstArm && !CALM) {
+      // A re-render (language switch). Restore what was already on screen at once.
+      Array.prototype.forEach.call(items, function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          var t = el.style.transition
+          el.style.transition = 'none'
+          el.classList.add('in')
+          countUp(el)
+          void el.offsetHeight
+          el.style.transition = t
+        }
+      })
+      items = document.querySelectorAll('.rv:not(.in)')
+    }
+    firstArm = false
+    if (CALM) {
+      Array.prototype.forEach.call(items, function (el) { el.classList.add('in') })
+      return
+    }
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(items, function (el) { el.classList.add('in') })
+      return
+    }
+    if (!io) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return
+          e.target.classList.add('in')
+          io.unobserve(e.target)
+          countUp(e.target)
+        })
+      }, { rootMargin: '0px 0px -12% 0px', threshold: .12 })
+    }
+    Array.prototype.forEach.call(items, function (el) { io.observe(el) })
+    watch()
+  }
+
+  // Counts a stat up to its final value. Reads the target from data-count rather
+  // than from the text, so re-running after a language switch cannot compound.
+  function countUp(root) {
+    var els = root.matches('[data-count]') ? [root] : root.querySelectorAll('[data-count]')
+    Array.prototype.forEach.call(els, function (el) {
+      if (el.dataset.done) return
+      el.dataset.done = '1'
+      var to = parseInt(el.getAttribute('data-count'), 10)
+      var sfx = el.getAttribute('data-suffix') || ''
+      if (!isFinite(to)) return
+      if (CALM) { el.textContent = to + sfx; return }
+      var t0 = 0
+      function step(ts) {
+        if (!t0) t0 = ts
+        var k = Math.min(1, (ts - t0) / 900)
+        var eased = 1 - Math.pow(1 - k, 3)
+        el.textContent = Math.round(to * eased) + sfx
+        if (k < 1) requestAnimationFrame(step)
+      }
+      requestAnimationFrame(step)
+    })
+  }
+
+  // The terminal writes itself out line by line. Each run cancels the previous
+  // one, because switching language re-renders the text underneath it.
+  var typeRun = 0
+  function typeTerminal() {
+    var lines = document.querySelectorAll('.term .ln')
+    var cur = $('.term .cur')
+    var run = ++typeRun
+    var typed = document.querySelectorAll('.term [data-type]')
+    // Keep the untyped text somewhere retrievable: render() has just written the
+    // current language into these nodes.
+    Array.prototype.forEach.call(typed, function (el) { el.dataset.full = el.textContent })
+    if (CALM) {
+      Array.prototype.forEach.call(lines, function (l) { l.classList.add('on') })
+      if (cur) cur.classList.add('on')
+      return
+    }
+    Array.prototype.forEach.call(typed, function (el) { el.textContent = '' })
+    Array.prototype.forEach.call(lines, function (l, i) { if (i) l.classList.remove('on') })
+    if (cur) cur.classList.remove('on')
+
+    var idx = 0
+    function line() {
+      if (run !== typeRun) return
+      if (idx >= typed.length) { if (cur) cur.classList.add('on'); return }
+      var el = typed[idx], full = el.dataset.full || '', pos = 0
+      var host = lines[idx + 1]
+      if (host) host.classList.add('on')
+      ;(function tick() {
+        if (run !== typeRun) return
+        pos += 2
+        el.textContent = full.slice(0, pos)
+        if (pos < full.length) return setTimeout(tick, 14)
+        idx++
+        setTimeout(line, 190)
+      })()
+    }
+    setTimeout(line, 620)
+  }
+
+  // Header picks up a shadow once the hero is behind you.
+  function watchHeader() {
+    var head = document.querySelector('header')
+    if (!head) return
+    var on = false
+    function upd() {
+      var want = window.scrollY > 24
+      if (want !== on) { on = want; head.classList.toggle('stuck', on) }
+    }
+    window.addEventListener('scroll', upd, { passive: true })
+    upd()
   }
 
   // ---- OS detection. Phones/tablets get no highlight: neither build runs there,
@@ -570,6 +960,11 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
       var d = REL.published_at ? new Date(REL.published_at).toLocaleDateString(lang === 'uk' ? 'uk-UA' : 'en-GB') : ''
       setText(note, t.published.replace('{v}', (REL.tag_name || '').replace(/^v/, '')).replace('{d}', d))
     }
+    // The badge next to "What's new" names the release it describes. Taking it from
+    // the live API rather than from the markup means it cannot be left behind by a
+    // release nobody remembered to hand-edit the page for.
+    var vb = $('#new-ver')
+    if (vb && REL && REL.tag_name) setText(vb, String(REL.tag_name).replace(/^v/, ''))
     ;[['win', '#row-win', '#meta-win', '#dl-win', '#yours-win'],
       ['mac', '#row-mac', '#meta-mac', '#dl-mac', '#yours-mac']].forEach(function (r) {
       var kind = r[0], row = $(r[1]), meta = $(r[2]), wrap = $(r[3]), badge = $(r[4])
@@ -628,6 +1023,7 @@ footer{border-top:1px solid var(--border);padding:44px 0 54px;margin-top:20px}
   if (lang === 'uk' && !/uk|ru/i.test(navigator.language || '')) { /* keep uk as the default anyway */ }
 
   render()
+  watchHeader()
   loadReleases()
 })()
 </script>
