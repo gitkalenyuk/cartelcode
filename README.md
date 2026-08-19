@@ -28,9 +28,9 @@
 
 | Система | Файл | Розмір |
 |:--|:--|:--|
-| **Windows 10/11** (x64) | **[CartelCode-Setup-1.0.3.exe](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.3/CartelCode-Setup-1.0.3.exe)** | 146 МБ |
-| **macOS** (Apple Silicon) | **[CartelCode-1.0.3-arm64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.3/CartelCode-1.0.3-arm64.dmg)** | 174 МБ |
-| **macOS** (Intel) | **[CartelCode-1.0.3-x64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.0.3/CartelCode-1.0.3-x64.dmg)** | 176 МБ |
+| **Windows 10/11** (x64) | **[CartelCode-Setup-1.1.0.exe](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-Setup-1.1.0.exe)** | 146 МБ |
+| **macOS** (Apple Silicon) | **[CartelCode-1.1.0-arm64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-1.1.0-arm64.dmg)** | 174 МБ |
+| **macOS** (Intel) | **[CartelCode-1.1.0-x64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-1.1.0-x64.dmg)** | 176 МБ |
 
 Усі файли й контрольні суми — на [сторінці релізів](https://github.com/gitkalenyuk/cartelcode/releases).
 
@@ -87,13 +87,13 @@ Node і Electron лежать усередині збірки. Системні 
 
 <details>
 <summary><b>Де зберігаються мої дані та ключі?</b></summary><br>
-Локально, у теці даних застосунку: профілі, історія сесій, API-ключі, плагіни. Запити йдуть напряму до провайдера через локальний шлюз на <code>1.0.3.1</code> — ми їх не бачимо й не проксуємо.
+Локально, у теці даних застосунку: профілі, історія сесій, API-ключі, плагіни. Запити йдуть напряму до провайдера через локальний шлюз на <code>1.1.0.1</code> — ми їх не бачимо й не проксуємо.
 </details>
 
 <details>
 <summary><b>Windows каже, що видавця не перевірено</b></summary><br>
 Збірка не підписана сертифікатом коду. У вікні SmartScreen: «Докладніше» → «Виконати попри все». Контрольну суму можна звірити самостійно:<br><br>
-<code>Get-FileHash CartelCode-Setup-1.0.3.exe -Algorithm SHA256</code><br><br>
+<code>Get-FileHash CartelCode-Setup-1.1.0.exe -Algorithm SHA256</code><br><br>
 Очікуване значення опубліковане в <a href="https://github.com/gitkalenyuk/cartelcode/releases/latest">релізі</a> у файлі <code>.sha256</code>.
 </details>
 
