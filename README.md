@@ -28,9 +28,9 @@
 
 | Система | Файл |
 |:--|:--|
-| **Windows 10/11** (x64) | **[CartelCode-Setup-1.1.0.exe](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-Setup-1.1.0.exe)** |
-| **macOS** (Apple Silicon) | **[CartelCode-1.1.0-arm64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-1.1.0-arm64.dmg)** |
-| **macOS** (Intel) | **[CartelCode-1.1.0-x64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.0/CartelCode-1.1.0-x64.dmg)** |
+| **Windows 10/11** (x64) | **[CartelCode-Setup-1.1.1.exe](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.1/CartelCode-Setup-1.1.1.exe)** |
+| **macOS** (Apple Silicon) | **[CartelCode-1.1.1-arm64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.1/CartelCode-1.1.1-arm64.dmg)** |
+| **macOS** (Intel) | **[CartelCode-1.1.1-x64.dmg](https://github.com/gitkalenyuk/cartelcode/releases/download/v1.1.1/CartelCode-1.1.1-x64.dmg)** |
 
 Розміри файлів і контрольні суми SHA-256 — на [сторінці релізів](https://github.com/gitkalenyuk/cartelcode/releases).
 
@@ -138,7 +138,7 @@ Node і Electron лежать усередині збірки. Системні 
 <details>
 <summary><b>Windows каже, що видавця не перевірено</b></summary><br>
 Збірка не підписана сертифікатом коду. У вікні SmartScreen: «Докладніше» → «Виконати попри все». Контрольну суму можна звірити самостійно:<br><br>
-<code>Get-FileHash CartelCode-Setup-1.1.0.exe -Algorithm SHA256</code><br><br>
+<code>Get-FileHash CartelCode-Setup-1.1.1.exe -Algorithm SHA256</code><br><br>
 Очікуване значення опубліковане в <a href="https://github.com/gitkalenyuk/cartelcode/releases/latest">релізі</a> у файлі <code>.sha256</code>.
 </details>
 
